@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://b1r7ad7ygwsws"]
+
+[ext_resource type="Texture2D" uid="uid://dnam53qtcbkyj" path="res://assets/images/mainmenu_bg.jpg" id="1_v0jb6"]
+[ext_resource type="Script" uid="uid://d0my5a2sxs43q" path="res://scripts/level/level_2/bb4level2.gd" id="2_v0jb6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_83l3i"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.27058825)
+shadow_size = 6
+shadow_offset = Vector2(0, 3.4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v0jb6"]
+bg_color = Color(0.36078432, 0.627451, 0.83137256, 0.4627451)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Level2" type="Node2D" unique_id=167200828]
+position = Vector2(203, 198)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=754164857]
+
+[node name="Background" type="TextureRect" parent="CanvasLayer" unique_id=563724938]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_v0jb6")
+expand_mode = 2
+
+[node name="BackButton2" type="Button" parent="CanvasLayer" unique_id=1471815522]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -88.0
+offset_top = -106.0
+offset_right = 88.0
+offset_bottom = -34.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 33
+theme_override_styles/normal = SubResource("StyleBoxFlat_83l3i")
+text = "Back"
+script = ExtResource("2_v0jb6")
+
+[node name="Label" type="Label" parent="CanvasLayer" unique_id=66635158]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -377.25
+offset_top = -72.5
+offset_right = 377.25
+offset_bottom = 72.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+theme_override_styles/normal = SubResource("StyleBoxFlat_v0jb6")
+text = "Coming Soon !!"
+horizontal_alignment = 1

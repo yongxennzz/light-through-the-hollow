@@ -2,10 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://dnam53qtcbkyj" path="res://assets/images/mainmenu_bg.jpg" id="1_1g8jr"]
 [ext_resource type="Texture2D" uid="uid://ddrc26w4kjfhh" path="res://assets/images/game_title.png" id="2_1g8jr"]
-[ext_resource type="Script" uid="uid://cb0jljhnd70hq" path="res://scripts/ui/start_button.gd" id="3_x2yvf"]
-[ext_resource type="Script" uid="uid://dtmkieiipko0g" path="res://scripts/ui/exit_button.gd" id="4_m1kxf"]
-[ext_resource type="Script" uid="uid://vtcllptnud23" path="res://scripts/ui/options_button.gd" id="4_uhagc"]
-[ext_resource type="Script" uid="uid://b7r2261rjy6mw" path="res://scripts/ui/credits_button.gd" id="4_x2yvf"]
+[ext_resource type="Script" uid="uid://cb0jljhnd70hq" path="res://scenes/ui/start_button.gd" id="3_x2yvf"]
+[ext_resource type="Script" uid="uid://dtmkieiipko0g" path="res://scenes/ui/exit_button.gd" id="4_m1kxf"]
+[ext_resource type="Script" uid="uid://b7r2261rjy6mw" path="res://scenes/ui/credits_button.gd" id="4_x2yvf"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7vrkn"]
 texture = ExtResource("1_1g8jr")
@@ -91,7 +90,6 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 33
 theme_override_styles/normal = SubResource("StyleBoxFlat_rhts7")
 text = "Options"
-script = ExtResource("4_uhagc")
 
 [node name="CreditsButton" type="Button" parent="VBoxContainer" unique_id=288151310]
 layout_mode = 2

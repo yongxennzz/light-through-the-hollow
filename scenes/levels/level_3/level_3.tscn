@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://cqsjqgw4xrbvv"]
+
+[ext_resource type="Texture2D" uid="uid://dnam53qtcbkyj" path="res://assets/images/mainmenu_bg.jpg" id="1_4olv3"]
+[ext_resource type="Script" uid="uid://d0my5a2sxs43q" path="res://scripts/level/level_2/bb4level2.gd" id="2_bfr33"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kvnv3"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.27058825)
+shadow_size = 6
+shadow_offset = Vector2(0, 3.4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4olv3"]
+bg_color = Color(0.36078432, 0.627451, 0.83137256, 0.4627451)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="Level3" type="Node2D" unique_id=617670323]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1518370479]
+
+[node name="Background" type="TextureRect" parent="CanvasLayer" unique_id=1958215857]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_4olv3")
+expand_mode = 2
+
+[node name="BackButton2" type="Button" parent="CanvasLayer" unique_id=1543692452]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -88.0
+offset_top = -106.0
+offset_right = 88.0
+offset_bottom = -34.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 33
+theme_override_styles/normal = SubResource("StyleBoxFlat_kvnv3")
+text = "Back"
+script = ExtResource("2_bfr33")
+
+[node name="Label" type="Label" parent="CanvasLayer" unique_id=1184418633]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -378.5
+offset_top = -72.5
+offset_right = 378.5
+offset_bottom = 72.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+theme_override_styles/normal = SubResource("StyleBoxFlat_4olv3")
+text = "Coming Soon !!"
+horizontal_alignment = 1
