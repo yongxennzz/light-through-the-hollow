@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://pqprjum0gqus"]
+
+[ext_resource type="Texture2D" uid="uid://brgevvume7uc0" path="res://assets/images/player/male_idle.png.png" id="1_gmlin"]
+[ext_resource type="Script" uid="uid://d4k2ydaxkoxii" path="res://scenes/player/player.gd" id="1_lvxji"]
+[ext_resource type="Texture2D" uid="uid://c20tnddmd05ta" path="res://assets/images/player/male_run_1.png.png" id="2_lvxji"]
+[ext_resource type="Texture2D" uid="uid://bt2pqd1pnar8j" path="res://assets/images/player/male_run_2.png.png" id="3_p47bc"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_75vfm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_gmlin")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_lvxji")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_p47bc")
+}],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gmlin"]
+size = Vector2(100, 120)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lvxji"]
+size = Vector2(100, 120)
+
+[node name="Player" type="CharacterBody2D" unique_id=1621341147]
+script = ExtResource("1_lvxji")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1183876143]
+scale = Vector2(0.25, 0.25)
+sprite_frames = SubResource("SpriteFrames_75vfm")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1474464238]
+position = Vector2(0, 20)
+shape = SubResource("RectangleShape2D_gmlin")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=701641954]
+
+[node name="HurtBox" type="Area2D" parent="." unique_id=876677933]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=1446733760]
+position = Vector2(0, 20)
+shape = SubResource("RectangleShape2D_lvxji")
