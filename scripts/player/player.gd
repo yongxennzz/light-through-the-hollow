@@ -1,7 +1,8 @@
 extends CharacterBody2D
 
 signal health_changed(current_health: int, max_health: int)
-signal died
+signal player_died
+signal torch_ready
 signal torch_cooldown_started(cooldown_seconds: float)
 
 const MAX_HEALTH := 3
@@ -31,18 +32,19 @@ var torch_cooldown_time_left := 0.0
 @onready var flashlight: Sprite2D = $Flashlight
 @onready var interaction_zone: Area2D = $InteractionZone
 
+
 func _ready() -> void:
 	spawn_position = global_position
 	health_changed.emit(health, MAX_HEALTH)
 
 	hurt_box.area_entered.connect(Callable(self, "_on_hurt_box_area_entered"))
 	torch_zone.area_entered.connect(Callable(self, "_on_torch_zone_area_entered"))
+	interaction_zone.area_entered.connect(Callable(self, "_on_interaction_zone_area_entered"))
+	interaction_zone.area_exited.connect(Callable(self, "_on_interaction_zone_area_exited"))
 
 	torch_zone.monitoring = false
 	flashlight.visible = false
-	
-	interaction_zone.area_entered.connect(Callable(self, "_on_interaction_zone_area_entered"))
-	interaction_zone.area_exited.connect(Callable(self, "_on_interaction_zone_area_exited"))
+
 
 func _physics_process(delta: float) -> void:
 	_update_torch(delta)
@@ -58,7 +60,7 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
 	if Input.is_action_just_pressed("drop_down") and is_on_floor():
@@ -67,18 +69,11 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("torchlight"):
 		use_torch()
 
-	var move_left := Input.is_key_pressed(KEY_A) or Input.is_action_pressed("ui_left")
-	var move_right := Input.is_key_pressed(KEY_D) or Input.is_action_pressed("ui_right")
+	if Input.is_action_just_pressed("interact") and not torch_active:
+		interact_with_nearest()
 
-	var direction := 0.0
-
-	if move_left:
-		direction -= 1.0
-
-	if move_right:
-		direction += 1.0
-
-	var is_running := Input.is_key_pressed(KEY_SHIFT)
+	var direction := Input.get_axis("move_left", "move_right")
+	var is_running := Input.is_action_pressed("run")
 	var current_speed := RUN_SPEED if is_running else WALK_SPEED
 
 	if is_invincible:
@@ -97,13 +92,10 @@ func _physics_process(delta: float) -> void:
 		animated_sprite.speed_scale = 1.0
 
 	move_and_slide()
-	
-	if Input.is_action_just_pressed("interact") and not torch_active:
-		interact_with_nearest()
 
 
 func _update_facing_direction() -> void:
-	animated_sprite.flip_h = facing_right	
+	animated_sprite.flip_h = facing_right
 	torch_zone.position.x = 120.0 if facing_right else -120.0
 	flashlight.position.x = 45.0 if facing_right else -45.0
 	flashlight.flip_h = not facing_right
@@ -134,6 +126,8 @@ func _update_torch(delta: float) -> void:
 	if torch_cooldown_time_left > 0.0:
 		torch_cooldown_time_left = maxf(torch_cooldown_time_left - delta, 0.0)
 
+		if torch_cooldown_time_left <= 0.0:
+			torch_ready.emit()
 
 func take_damage(amount: int = 1) -> void:
 	if is_invincible:
@@ -143,7 +137,7 @@ func take_damage(amount: int = 1) -> void:
 	health_changed.emit(health, MAX_HEALTH)
 
 	if health <= 0:
-		died.emit()
+		player_died.emit()
 		reset_for_level()
 		return
 
@@ -169,6 +163,7 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 func _on_torch_zone_area_entered(area: Area2D) -> void:
 	if torch_active and area.is_in_group("stunnable") and area.has_method("stun"):
 		area.stun()
+
 
 func interact_with_nearest() -> void:
 	var closest_interactable: Area2D = null

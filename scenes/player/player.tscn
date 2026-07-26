@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://00atclpf5h7f"]
 
 [ext_resource type="Texture2D" uid="uid://brgevvume7uc0" path="res://assets/images/player/male_idle.png.png" id="1_gmlin"]
-[ext_resource type="Script" uid="uid://d4k2ydaxkoxii" path="res://scenes/player/player.gd" id="1_lvxji"]
 [ext_resource type="Texture2D" uid="uid://c20tnddmd05ta" path="res://assets/images/player/male_run_1.png.png" id="2_lvxji"]
 [ext_resource type="Texture2D" uid="uid://bt2pqd1pnar8j" path="res://assets/images/player/male_run_2.png.png" id="3_p47bc"]
 [ext_resource type="Texture2D" uid="uid://balhutnu1xbd5" path="res://assets/images/player/Flashlight.png" id="5_p47bc"]
+[ext_resource type="Script" uid="uid://d4k2ydaxkoxii" path="res://scripts/player/player.gd" id="6_player_script"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_75vfm"]
 animations = [{
@@ -41,7 +41,7 @@ size = Vector2(180, 110)
 size = Vector2(180, 140)
 
 [node name="Player" type="CharacterBody2D" unique_id=1621341147]
-script = ExtResource("1_lvxji")
+script = ExtResource("6_player_script")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1183876143]
 scale = Vector2(0.25, 0.25)
