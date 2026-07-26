@@ -18,6 +18,7 @@ var health := MAX_HEALTH
 var is_invincible := false
 var invincibility_time_left := 0.0
 var spawn_position := Vector2.ZERO
+var nearby_interactables: Array[Area2D] = []
 
 var facing_right := true
 var torch_active := false
@@ -28,7 +29,7 @@ var torch_cooldown_time_left := 0.0
 @onready var hurt_box: Area2D = $HurtBox
 @onready var torch_zone: Area2D = $TorchZone
 @onready var flashlight: Sprite2D = $Flashlight
-
+@onready var interaction_zone: Area2D = $InteractionZone
 
 func _ready() -> void:
 	spawn_position = global_position
@@ -39,7 +40,9 @@ func _ready() -> void:
 
 	torch_zone.monitoring = false
 	flashlight.visible = false
-
+	
+	interaction_zone.area_entered.connect(Callable(self, "_on_interaction_zone_area_entered"))
+	interaction_zone.area_exited.connect(Callable(self, "_on_interaction_zone_area_exited"))
 
 func _physics_process(delta: float) -> void:
 	_update_torch(delta)
@@ -94,10 +97,13 @@ func _physics_process(delta: float) -> void:
 		animated_sprite.speed_scale = 1.0
 
 	move_and_slide()
+	
+	if Input.is_action_just_pressed("interact") and not torch_active:
+		interact_with_nearest()
 
 
 func _update_facing_direction() -> void:
-	animated_sprite.flip_h = facing_right
+	animated_sprite.flip_h = facing_right	
 	torch_zone.position.x = 120.0 if facing_right else -120.0
 	flashlight.position.x = 45.0 if facing_right else -45.0
 	flashlight.flip_h = not facing_right
@@ -163,3 +169,29 @@ func _on_hurt_box_area_entered(area: Area2D) -> void:
 func _on_torch_zone_area_entered(area: Area2D) -> void:
 	if torch_active and area.is_in_group("stunnable") and area.has_method("stun"):
 		area.stun()
+
+func interact_with_nearest() -> void:
+	var closest_interactable: Area2D = null
+	var closest_distance := INF
+
+	for interactable in nearby_interactables:
+		if not is_instance_valid(interactable):
+			continue
+
+		var distance := global_position.distance_to(interactable.global_position)
+
+		if distance < closest_distance:
+			closest_distance = distance
+			closest_interactable = interactable
+
+	if closest_interactable != null and closest_interactable.has_method("interact"):
+		closest_interactable.interact(self)
+
+
+func _on_interaction_zone_area_entered(area: Area2D) -> void:
+	if area.is_in_group("interactable") and area not in nearby_interactables:
+		nearby_interactables.append(area)
+
+
+func _on_interaction_zone_area_exited(area: Area2D) -> void:
+	nearby_interactables.erase(area)

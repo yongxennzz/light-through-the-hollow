@@ -37,6 +37,9 @@ size = Vector2(100, 120)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p47bc"]
 size = Vector2(180, 110)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_75vfm"]
+size = Vector2(180, 140)
+
 [node name="Player" type="CharacterBody2D" unique_id=1621341147]
 script = ExtResource("1_lvxji")
 
@@ -69,3 +72,8 @@ z_index = 1
 position = Vector2(45, 20)
 scale = Vector2(0.18, 0.18)
 texture = ExtResource("5_p47bc")
+
+[node name="InteractionZone" type="Area2D" parent="." unique_id=905313625]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone" unique_id=654538197]
+shape = SubResource("RectangleShape2D_75vfm")
