@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://d24ynh3evbp7f"]
+[gd_scene format=3 uid="uid://phihaoc3b6t5"]
 
-[ext_resource type="PackedScene" uid="uid://pqprjum0gqus" path="res://scenes/player/player.tscn" id="1_uu86x"]
+[ext_resource type="PackedScene" uid="uid://00atclpf5h7f" path="res://scenes/player/player.tscn" id="1_uu86x"]
+[ext_resource type="Script" uid="uid://cnoibrgmqql0h" path="res://scenes/player/torch_dummy.gd" id="2_nmncv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uu86x"]
 size = Vector2(1600, 100)
@@ -10,6 +11,9 @@ size = Vector2(280, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eqd6a"]
 size = Vector2(80, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5627i"]
+size = Vector2(80, 120)
 
 [node name="PlayerTestLevel" type="Node2D" unique_id=1886576204]
 
@@ -55,3 +59,17 @@ offset_top = -50.0
 offset_right = 40.0
 offset_bottom = 50.0
 color = Color(1, 0.19215687, 0.15294118, 1)
+
+[node name="TorchDummy" type="Area2D" parent="." unique_id=379389219 groups=["stunnable"]]
+position = Vector2(550, 470)
+script = ExtResource("2_nmncv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TorchDummy" unique_id=832773537]
+shape = SubResource("RectangleShape2D_5627i")
+
+[node name="DummyVisual" type="ColorRect" parent="TorchDummy" unique_id=935184013]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = 60.0
+color = Color(0.67421633, 0.0003495255, 0.6761911, 1)
