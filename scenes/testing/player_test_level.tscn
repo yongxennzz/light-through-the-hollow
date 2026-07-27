@@ -65,7 +65,7 @@ offset_bottom = 50.0
 color = Color(1, 0.19215687, 0.15294118, 1)
 
 [node name="TorchDummy" type="Area2D" parent="." unique_id=379389219 groups=["stunnable"]]
-position = Vector2(550, 470)
+position = Vector2(443, 488)
 script = ExtResource("2_nmncv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TorchDummy" unique_id=832773537]
@@ -77,9 +77,10 @@ offset_top = -60.0
 offset_right = 40.0
 offset_bottom = 60.0
 color = Color(0.67421633, 0.0003495255, 0.6761911, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="TestMachine" type="Area2D" parent="." unique_id=174425531 groups=["interactable"]]
-position = Vector2(420, 470)
+position = Vector2(52, 491)
 script = ExtResource("3_eqd6a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestMachine" unique_id=191667479]
@@ -91,3 +92,4 @@ offset_top = -60.0
 offset_right = 50.0
 offset_bottom = 60.0
 color = Color(0.5137255, 1, 1, 1)
+metadata/_edit_use_anchors_ = true
