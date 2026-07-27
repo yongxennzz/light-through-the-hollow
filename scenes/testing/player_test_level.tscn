@@ -85,47 +85,19 @@ offset_right = 140.0
 offset_bottom = 20.0
 color = Color(0.02745098, 1, 1, 1)
 
-<<<<<<< Updated upstream
-[node name="TestHazard" type="Area2D" parent="." unique_id=439609206 groups=["damage_zone"]]
-position = Vector2(950, 500)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TestHazard" unique_id=1590229796]
-shape = SubResource("RectangleShape2D_eqd6a")
-
-[node name="HazardVisual" type="ColorRect" parent="TestHazard" unique_id=465180998]
-offset_left = -40.0
-offset_top = -50.0
-offset_right = 40.0
-offset_bottom = 50.0
-color = Color(1, 0.19215687, 0.15294118, 1)
-
-[node name="TorchDummy" type="Area2D" parent="." unique_id=379389219 groups=["stunnable"]]
-position = Vector2(443, 488)
-=======
 [node name="TestBoss" type="Area2D" parent="." unique_id=379389219 groups=["damage_zone", "stunnable"]]
 position = Vector2(550, 470)
->>>>>>> Stashed changes
 script = ExtResource("2_nmncv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestBoss" unique_id=832773537]
 shape = SubResource("RectangleShape2D_5627i")
 
-<<<<<<< Updated upstream
-[node name="DummyVisual" type="ColorRect" parent="TorchDummy" unique_id=935184013]
-offset_left = -40.0
-offset_top = -60.0
-offset_right = 40.0
-offset_bottom = 60.0
-color = Color(0.67421633, 0.0003495255, 0.6761911, 1)
-metadata/_edit_use_anchors_ = true
-=======
 [node name="DummyVisual" type="AnimatedSprite2D" parent="TestBoss" unique_id=2095785607]
 scale = Vector2(2.5, 2.5)
 sprite_frames = SubResource("SpriteFrames_6ru6a")
 animation = &"idle"
 frame = 3
 frame_progress = 1.0
->>>>>>> Stashed changes
 
 [node name="TestMachine" type="Area2D" parent="." unique_id=174425531 groups=["interactable"]]
 position = Vector2(52, 491)

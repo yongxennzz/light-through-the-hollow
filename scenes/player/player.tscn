@@ -53,6 +53,10 @@ position = Vector2(0, 20)
 shape = SubResource("RectangleShape2D_gmlin")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=701641954]
+limit_left = 0
+limit_top = 0
+limit_right = 1280
+limit_bottom = 720
 
 [node name="HurtBox" type="Area2D" parent="." unique_id=876677933]
 
