@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://00atclpf5h7f"]
+
+[ext_resource type="Texture2D" uid="uid://brgevvume7uc0" path="res://assets/images/player/male_idle.png.png" id="1_gmlin"]
+[ext_resource type="Texture2D" uid="uid://c20tnddmd05ta" path="res://assets/images/player/male_run_1.png.png" id="2_lvxji"]
+[ext_resource type="Texture2D" uid="uid://bt2pqd1pnar8j" path="res://assets/images/player/male_run_2.png.png" id="3_p47bc"]
+[ext_resource type="Texture2D" uid="uid://balhutnu1xbd5" path="res://assets/images/player/Flashlight.png" id="5_p47bc"]
+[ext_resource type="Script" uid="uid://d4k2ydaxkoxii" path="res://scripts/player/player.gd" id="6_player_script"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_75vfm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_gmlin")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_lvxji")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_p47bc")
+}],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gmlin"]
+size = Vector2(100, 120)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lvxji"]
+size = Vector2(100, 120)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p47bc"]
+size = Vector2(180, 110)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_75vfm"]
+size = Vector2(180, 140)
+
+[node name="Player" type="CharacterBody2D" unique_id=1621341147]
+script = ExtResource("6_player_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1183876143]
+scale = Vector2(0.25, 0.25)
+sprite_frames = SubResource("SpriteFrames_75vfm")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1474464238]
+position = Vector2(0, 20)
+shape = SubResource("RectangleShape2D_gmlin")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=701641954]
+
+[node name="HurtBox" type="Area2D" parent="." unique_id=876677933]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=1446733760]
+position = Vector2(0, 20)
+shape = SubResource("RectangleShape2D_lvxji")
+
+[node name="TorchZone" type="Area2D" parent="." unique_id=2102887030]
+position = Vector2(120, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TorchZone" unique_id=86224520]
+shape = SubResource("RectangleShape2D_p47bc")
+
+[node name="Flashlight" type="Sprite2D" parent="." unique_id=1961871725]
+visible = false
+z_index = 1
+position = Vector2(45, 20)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("5_p47bc")
+
+[node name="InteractionZone" type="Area2D" parent="." unique_id=905313625]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone" unique_id=654538197]
+shape = SubResource("RectangleShape2D_75vfm")
