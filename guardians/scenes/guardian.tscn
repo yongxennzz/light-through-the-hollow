@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cqcfbb8y3unow"]
 
-[ext_resource type="Script" uid="uid://cq8b1o4b75228" path="res://guardian.gd" id="1_irh1l"]
-[ext_resource type="Texture2D" uid="uid://v0qtw871rtib" path="res://icon.svg" id="2_f7isl"]
-[ext_resource type="Script" uid="uid://dc0pnmiykctdq" path="res://siumun/torch_hurt_area.gd" id="3_f7isl"]
+[ext_resource type="Script" uid="uid://cguxtk1jwr8d2" path="res://guardians/scripts/guardian.gd" id="1_wcu5v"]
+[ext_resource type="Texture2D" uid="uid://ds20tf3gvct76" path="res://icon.svg" id="2_f7isl"]
+[ext_resource type="Script" uid="uid://dc0pnmiykctdq" path="res://guardians/scripts/torch_hurt_area.gd" id="3_f7isl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cpsn1"]
 size = Vector2(129, 128)
@@ -12,7 +12,7 @@ radius = 75.0
 height = 206.0
 
 [node name="Guardian" type="CharacterBody2D" unique_id=385479496]
-script = ExtResource("1_irh1l")
+script = ExtResource("1_wcu5v")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=933801472]
 position = Vector2(290, 350)
