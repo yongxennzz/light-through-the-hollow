@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://cqcfbb8y3unow"]
+
+[ext_resource type="Script" uid="uid://cguxtk1jwr8d2" path="res://guardians/scripts/guardian.gd" id="1_wcu5v"]
+[ext_resource type="Texture2D" uid="uid://ds20tf3gvct76" path="res://icon.svg" id="2_f7isl"]
+[ext_resource type="Script" uid="uid://dc0pnmiykctdq" path="res://guardians/scripts/torch_hurt_area.gd" id="3_f7isl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cpsn1"]
+size = Vector2(129, 128)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5k2jw"]
+radius = 75.0
+height = 206.0
+
+[node name="Guardian" type="CharacterBody2D" unique_id=385479496]
+script = ExtResource("1_wcu5v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=933801472]
+position = Vector2(290, 350)
+shape = SubResource("RectangleShape2D_cpsn1")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1549900370]
+position = Vector2(290, 350)
+texture = ExtResource("2_f7isl")
+
+[node name="VisionRayCast" type="RayCast2D" parent="." unique_id=279853224]
+
+[node name="TorchHurtArea" type="Area2D" parent="." unique_id=896779869]
+script = ExtResource("3_f7isl")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TorchHurtArea" unique_id=2119072967]
+position = Vector2(3, 3)
+scale = Vector2(1.1460937, 1)
+polygon = PackedVector2Array(-3, -9, 787.8936, 482, 0, 644)
+
+[node name="PlayerDamageArea" type="Area2D" parent="." unique_id=1538632638]
+position = Vector2(290, 350)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDamageArea" unique_id=1569045837]
+shape = SubResource("CapsuleShape2D_5k2jw")
+
+[node name="StunTimer" type="Timer" parent="." unique_id=1060794129]
+
+[node name="PatrolTimer" type="Timer" parent="." unique_id=129200797]
+
+[node name="DetectionTimer" type="Timer" parent="." unique_id=1003317760]
