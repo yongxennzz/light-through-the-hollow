@@ -75,5 +75,3 @@ Add the Area2D to this Scene Group:
 
 ```text
 damage_zone
-
-hvgcvhbjkhgyu
