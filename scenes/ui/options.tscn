@@ -1,0 +1,143 @@
+[gd_scene format=3 uid="uid://bn37h57r5ynbf"]
+
+[ext_resource type="Script" uid="uid://c4tw3q5cigumf" path="res://scripts/ui/options.gd" id="1_hhwow"]
+[ext_resource type="Texture2D" uid="uid://dnam53qtcbkyj" path="res://assets/images/mainmenu_bg.jpg" id="1_l4ffv"]
+[ext_resource type="Texture2D" uid="uid://bhyjprr64hsqc" path="res://assets/images/options_title.png" id="2_hhwow"]
+[ext_resource type="Script" uid="uid://c4wbwohf7l7tn" path="res://scripts/ui/back_button.gd" id="3_wby6m"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pykmj"]
+texture = ExtResource("1_l4ffv")
+modulate_color = Color(0.8118375, 0.8118375, 0.8118375, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gdfy8"]
+texture = ExtResource("2_hhwow")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b0jeg"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.27058825)
+shadow_size = 6
+shadow_offset = Vector2(0, 3.4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hhwow"]
+content_margin_left = 0.0
+content_margin_top = 5.0
+content_margin_right = 0.0
+content_margin_bottom = 5.0
+bg_color = Color(0.16445974, 0.16445976, 0.16445974, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wby6m"]
+bg_color = Color(0.999999, 0.09128962, 0.47206694, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pykmj"]
+bg_color = Color(0.69949406, 0, 0.3162968, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[node name="Options" type="Control" unique_id=1970075290]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hhwow")
+
+[node name="Background" type="Panel" parent="." unique_id=483918455]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_pykmj")
+
+[node name="Title" type="Panel" parent="." unique_id=396085489]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -288.0
+offset_top = 20.0
+offset_right = 288.0
+offset_bottom = 137.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_gdfy8")
+
+[node name="Panel" type="Panel" parent="." unique_id=1083454418]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -235.5
+offset_right = 450.0
+offset_bottom = 304.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackButton" type="Button" parent="." unique_id=1839765835]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -91.0
+offset_top = -148.0
+offset_right = 91.0
+offset_bottom = -72.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 33
+theme_override_styles/normal = SubResource("StyleBoxFlat_b0jeg")
+text = "Back"
+script = ExtResource("3_wby6m")
+
+[node name="MasterVolumeLabel" type="Label" parent="." unique_id=630430833]
+layout_mode = 0
+offset_left = 236.0
+offset_top = 154.0
+offset_right = 485.0
+offset_bottom = 215.0
+theme_override_font_sizes/font_size = 34
+text = "Master Volume"
+
+[node name="MasterVolumeSlider" type="HSlider" parent="." unique_id=877950934]
+layout_mode = 0
+offset_left = 236.0
+offset_top = 213.0
+offset_right = 983.0
+offset_bottom = 235.0
+theme_override_styles/slider = SubResource("StyleBoxFlat_hhwow")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_wby6m")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_pykmj")
+value = 50.0
+
+[node name="VolumePercentageLabel" type="Label" parent="." unique_id=1561304766]
+layout_mode = 0
+offset_left = 999.0
+offset_top = 201.0
+offset_right = 1067.0
+offset_bottom = 246.0
+theme_override_font_sizes/font_size = 32
+text = "50%"
+
+[connection signal="value_changed" from="MasterVolumeSlider" to="." method="_on_master_volume_slider_value_changed"]

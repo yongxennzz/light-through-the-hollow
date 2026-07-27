@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://daiba7o0vh7sm"]
+
+[ext_resource type="Texture2D" uid="uid://dnam53qtcbkyj" path="res://assets/images/mainmenu_bg.jpg" id="1_h46an"]
+[ext_resource type="Texture2D" uid="uid://x1ioe0lbifox" path="res://assets/images/credits_title.png" id="2_gl0iw"]
+[ext_resource type="Script" uid="uid://c4wbwohf7l7tn" path="res://scripts/ui/back_button.gd" id="3_pxp4k"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2m7a6"]
+texture = ExtResource("1_h46an")
+modulate_color = Color(0.8146782, 0.81467867, 0.81467843, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rmtb2"]
+texture = ExtResource("2_gl0iw")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1io8x"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.27058825)
+shadow_size = 6
+shadow_offset = Vector2(0, 3.4)
+
+[node name="Control" type="Control" unique_id=36870943]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="Panel" parent="." unique_id=633987325]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_2m7a6")
+
+[node name="Panel" type="Panel" parent="." unique_id=862873521]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.028125
+anchor_top = 0.06944445
+anchor_right = 0.971875
+anchor_bottom = 0.97083336
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel" unique_id=777191751]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 52.0
+offset_right = 1162.0
+offset_bottom = 547.0
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/normal_font_size = 20
+text = "Light Through The Hollow 
+
+Made by Hajimi
+
+Team:
+Ang Yong Xen — UI,  Audio, Level Design 1
+Chris Tan Jian Yi — Player Systems, Level Design 2
+Kok Siu Mun — Guardian AI, Level Design 3
+
+Artwork:
+Original artwork by Ang Yong Xen
+AI-assisted artwork,
+External assets: Kenney.nl, Magnific, OpenGameArt.org
+
+Built with Godot 4
+
+Thank you for playing! ❤️❤️❤️"
+horizontal_alignment = 1
+
+[node name="Title" type="Panel" parent="." unique_id=2093023552]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -188.5
+offset_right = 188.5
+offset_bottom = 95.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_rmtb2")
+
+[node name="BackButton" type="Button" parent="." unique_id=1788422343]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -88.0
+offset_top = -106.0
+offset_right = 88.0
+offset_bottom = -34.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 33
+theme_override_styles/normal = SubResource("StyleBoxFlat_1io8x")
+text = "Back"
+script = ExtResource("3_pxp4k")
