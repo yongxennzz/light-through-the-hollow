@@ -1,13 +1,14 @@
 extends Area2D
 
-@onready var dummy_visual: ColorRect = $DummyVisual
+@onready var dummy_visual: AnimatedSprite2D = $DummyVisual
 
-var normal_color: Color
+var normal_modulate: Color
 var stunned := false
 
 
 func _ready() -> void:
-	normal_color = dummy_visual.color
+	normal_modulate = dummy_visual.modulate
+	dummy_visual.play("idle")
 
 
 func stun() -> void:
@@ -15,9 +16,11 @@ func stun() -> void:
 		return
 
 	stunned = true
-	dummy_visual.color = Color.YELLOW
+	monitorable = false
+	dummy_visual.modulate = Color(1.0, 1.0, 0.25, 1.0)
 
 	await get_tree().create_timer(3.0).timeout
 
-	dummy_visual.color = normal_color
+	monitorable = true
+	dummy_visual.modulate = normal_modulate
 	stunned = false
