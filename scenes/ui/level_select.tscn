@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://r43swxah2wls"]
 
 [ext_resource type="Texture2D" uid="uid://dnam53qtcbkyj" path="res://assets/images/mainmenu_bg.jpg" id="1_l0h45"]
-[ext_resource type="Texture2D" uid="uid://gdt2fkxtds7o" path="res://assets/images/chooselevel_title.png" id="2_l0h45"]
+[ext_resource type="Texture2D" uid="uid://gdt2fkxtds7o" path="res://assets/images/ChooseLevel_title.png" id="2_l0h45"]
 [ext_resource type="Script" uid="uid://c4wbwohf7l7tn" path="res://scripts/ui/back_button.gd" id="3_7l8mc"]
+[ext_resource type="Script" uid="uid://i86bxolky7un" path="res://scripts/level/level_1/level_1.gd" id="4_8yp2s"]
 [ext_resource type="Script" uid="uid://mmjqv7tmf35q" path="res://scripts/ui/selectlvl2button.gd" id="4_ccmqc"]
 [ext_resource type="Script" uid="uid://dhkj4i07ndngl" path="res://scripts/level/level_3/level_3.gd" id="5_swyxg"]
 
@@ -126,6 +127,7 @@ theme_override_font_sizes/font_size = 33
 theme_override_styles/normal = SubResource("StyleBoxFlat_l0h45")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7l8mc")
 text = "Level 1"
+script = ExtResource("4_8yp2s")
 
 [node name="Level2" type="Button" parent="LevelBox/VBoxContainer" unique_id=579779791]
 layout_mode = 2

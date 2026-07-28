@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 MenuMusic="*uid://vkxbsat7k1ge"
 ButtonSound="*uid://cpcai2o58v1ab"
+Settings="*uid://dtwwiv617n86k"
 
 [display]
 

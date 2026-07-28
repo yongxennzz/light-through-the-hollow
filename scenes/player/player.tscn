@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://c20tnddmd05ta" path="res://assets/images/player/male_run_1.png.png" id="2_lvxji"]
 [ext_resource type="Texture2D" uid="uid://bt2pqd1pnar8j" path="res://assets/images/player/male_run_2.png.png" id="3_p47bc"]
 [ext_resource type="Texture2D" uid="uid://balhutnu1xbd5" path="res://assets/images/player/Flashlight.png" id="5_p47bc"]
+[ext_resource type="AudioStream" uid="uid://w2wvvt4oqlnh" path="res://assets/audio/jump-sound.mp3" id="6_75vfm"]
 [ext_resource type="Script" uid="uid://d4k2ydaxkoxii" path="res://scripts/player/player.gd" id="6_player_script"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_75vfm"]
@@ -82,3 +83,6 @@ texture = ExtResource("5_p47bc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone" unique_id=654538197]
 shape = SubResource("RectangleShape2D_75vfm")
+
+[node name="JumpSound" type="AudioStreamPlayer2D" parent="." unique_id=1166397266]
+stream = ExtResource("6_75vfm")

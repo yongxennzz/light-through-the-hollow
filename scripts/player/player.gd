@@ -28,6 +28,7 @@ var torch_flash_time_left := 0.0
 var torch_cooldown_time_left := 0.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var jump_sound: AudioStreamPlayer2D = $JumpSound
 @onready var hurt_box: Area2D = $HurtBox
 @onready var torch_zone: Area2D = $TorchZone
 @onready var flashlight: Sprite2D = $Flashlight
@@ -35,174 +36,183 @@ var torch_cooldown_time_left := 0.0
 
 
 func _ready() -> void:
-    spawn_position = global_position
-    health_changed.emit(health, MAX_HEALTH)
+	spawn_position = global_position
+	health_changed.emit(health, MAX_HEALTH)
 
-    hurt_box.area_entered.connect(Callable(self, "_on_hurt_box_area_entered"))
-    torch_zone.area_entered.connect(Callable(self, "_on_torch_zone_area_entered"))
-    interaction_zone.area_entered.connect(Callable(self, "_on_interaction_zone_area_entered"))
-    interaction_zone.area_exited.connect(Callable(self, "_on_interaction_zone_area_exited"))
+	hurt_box.area_entered.connect(Callable(self, "_on_hurt_box_area_entered"))
+	torch_zone.area_entered.connect(Callable(self, "_on_torch_zone_area_entered"))
+	interaction_zone.area_entered.connect(Callable(self, "_on_interaction_zone_area_entered"))
+	interaction_zone.area_exited.connect(Callable(self, "_on_interaction_zone_area_exited"))
 
-    torch_zone.monitoring = false
-    flashlight.visible = false
+	torch_zone.monitoring = false
+	flashlight.visible = false
 
 
 func _physics_process(delta: float) -> void:
-    _update_torch(delta)
+	_update_torch(delta)
 
-    if is_invincible:
-        invincibility_time_left -= delta
-        animated_sprite.modulate.a = 0.45 if int(invincibility_time_left * 10.0) % 2 == 0 else 1.0
+	if is_invincible:
+		invincibility_time_left -= delta
+		animated_sprite.modulate.a = 0.45 if int(invincibility_time_left * 10.0) % 2 == 0 else 1.0
 
-        if invincibility_time_left <= 0.0:
-            is_invincible = false
-            animated_sprite.modulate.a = 1.0
+		if invincibility_time_left <= 0.0:
+			is_invincible = false
+			animated_sprite.modulate.a = 1.0
 
-    if is_on_ladder:
-        var climb_direction := Input.get_axis("move_up", "move_down")
-        velocity.y = climb_direction * WALK_SPEED
-    else:
-        if not is_on_floor():
-            velocity += get_gravity() * delta
+	if is_on_ladder:
+		var climb_direction := Input.get_axis("move_up", "move_down")
+		velocity.y = climb_direction * WALK_SPEED
+	else:
+		if not is_on_floor():
+			velocity += get_gravity() * delta
 
-    if Input.is_action_just_pressed("jump") and is_on_floor():
-        velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+		jump_sound.play()
 
-    if Input.is_action_just_pressed("drop_down") and is_on_floor():
-        position.y += 16
+	if Input.is_action_just_pressed("drop_down") and is_on_floor():
+		position.y += 16
 
-    if Input.is_action_just_pressed("torchlight"):
-        use_torch()
+	if Input.is_action_just_pressed("torchlight"):
+		use_torch()
 
-    if Input.is_action_just_pressed("interact") and not torch_active:
-        interact_with_nearest()
+	if Input.is_action_just_pressed("interact") and not torch_active:
+		interact_with_nearest()
 
-    var direction := Input.get_axis("move_left", "move_right")
-    var is_running := Input.is_action_pressed("run")
-    var current_speed := RUN_SPEED if is_running else WALK_SPEED
+	var direction := Input.get_axis("move_left", "move_right")
+	var is_running := Input.is_action_pressed("run")
+	var current_speed := RUN_SPEED if is_running else WALK_SPEED
 
-    if is_invincible:
-        current_speed = maxf(current_speed, DAMAGE_ESCAPE_SPEED)
+	if is_invincible:
+		current_speed = maxf(current_speed, DAMAGE_ESCAPE_SPEED)
 
-    if direction != 0:
-        facing_right = direction > 0
-        _update_facing_direction()
+	if direction != 0:
+		facing_right = direction > 0
+		_update_facing_direction()
 
-        velocity.x = direction * current_speed
-        animated_sprite.play("run")
-        animated_sprite.speed_scale = 1.5 if is_running else 0.75
-    else:
-        velocity.x = move_toward(velocity.x, 0, WALK_SPEED * 8.0 * delta)
-        animated_sprite.play("idle")
-        animated_sprite.speed_scale = 1.0
+		velocity.x = direction * current_speed
+		animated_sprite.play("run")
+		animated_sprite.speed_scale = 1.5 if is_running else 0.75
+	else:
+		velocity.x = move_toward(velocity.x, 0, WALK_SPEED * 8.0 * delta)
+		animated_sprite.play("idle")
+		animated_sprite.speed_scale = 1.0
 
-    move_and_slide()
+	move_and_slide()
 
 
 func _update_facing_direction() -> void:
-    animated_sprite.flip_h = facing_right
-    torch_zone.position.x = 120.0 if facing_right else -120.0
-    flashlight.position.x = 45.0 if facing_right else -45.0
-    flashlight.flip_h = not facing_right
+	animated_sprite.flip_h = facing_right
+	torch_zone.position.x = 120.0 if facing_right else -120.0
+	flashlight.position.x = 45.0 if facing_right else -45.0
+	flashlight.flip_h = not facing_right
 
 
 func use_torch() -> void:
-    if torch_cooldown_time_left > 0.0:
-        return
+	if torch_cooldown_time_left > 0.0:
+		return
 
-    torch_active = true
-    torch_flash_time_left = TORCH_FLASH_DURATION
-    torch_cooldown_time_left = TORCH_COOLDOWN_DURATION
+	torch_active = true
+	torch_flash_time_left = TORCH_FLASH_DURATION
+	torch_cooldown_time_left = TORCH_COOLDOWN_DURATION
 
-    flashlight.visible = true
-    torch_zone.monitoring = true
-    torch_cooldown_started.emit(TORCH_COOLDOWN_DURATION)
+	flashlight.visible = true
+	torch_zone.monitoring = true
+	torch_cooldown_started.emit(TORCH_COOLDOWN_DURATION)
 
 
 func _update_torch(delta: float) -> void:
-    if torch_flash_time_left > 0.0:
-        torch_flash_time_left -= delta
+	if torch_flash_time_left > 0.0:
+		torch_flash_time_left -= delta
 
-        if torch_flash_time_left <= 0.0:
-            torch_active = false
-            flashlight.visible = false
-            torch_zone.monitoring = false
+		if torch_flash_time_left <= 0.0:
+			torch_active = false
+			flashlight.visible = false
+			torch_zone.monitoring = false
 
-    if torch_cooldown_time_left > 0.0:
-        torch_cooldown_time_left = maxf(torch_cooldown_time_left - delta, 0.0)
+	if torch_cooldown_time_left > 0.0:
+		torch_cooldown_time_left = maxf(torch_cooldown_time_left - delta, 0.0)
 
-        if torch_cooldown_time_left <= 0.0:
-            torch_ready.emit()
+		if torch_cooldown_time_left <= 0.0:
+			torch_ready.emit()
 
 
 func take_damage(amount: int = 1) -> void:
-    if is_invincible:
-        return
+	if is_invincible:
+		return
 
-    health = maxi(health - amount, 0)
-    health_changed.emit(health, MAX_HEALTH)
+	health = maxi(health - amount, 0)
+	health_changed.emit(health, MAX_HEALTH)
 
-    if health <= 0:
-        player_died.emit()
-        reset_for_level()
-        return
+	if health <= 0:
+		player_died.emit()
+		reset_for_level()
+		return
 
-    is_invincible = true
-    invincibility_time_left = INVINCIBILITY_DURATION
+	is_invincible = true
+	invincibility_time_left = INVINCIBILITY_DURATION
 
 
 func reset_for_level() -> void:
-    health = MAX_HEALTH
-    is_invincible = false
-    invincibility_time_left = 0.0
-    animated_sprite.modulate.a = 1.0
-    global_position = spawn_position
-    velocity = Vector2.ZERO
-    health_changed.emit(health, MAX_HEALTH)
+	health = MAX_HEALTH
+	is_invincible = false
+	invincibility_time_left = 0.0
+	animated_sprite.modulate.a = 1.0
+	global_position = spawn_position
+	velocity = Vector2.ZERO
+	health_changed.emit(health, MAX_HEALTH)
 
 
 func _on_hurt_box_area_entered(area: Area2D) -> void:
-    if area.is_in_group("damage_zone"):
-        take_damage()
+	if area.is_in_group("damage_zone"):
+		take_damage()
 
 
 func _on_torch_zone_area_entered(area: Area2D) -> void:
-    if torch_active and area.is_in_group("stunnable") and area.has_method("stun"):
-        area.stun()
+	if torch_active and area.is_in_group("stunnable") and area.has_method("stun"):
+		area.stun()
 
 
 func interact_with_nearest() -> void:
-    var closest_interactable: Area2D = null
-    var closest_distance := INF
+	var closest_interactable: Area2D = null
+	var closest_distance := INF
 
-    for interactable in nearby_interactables:
-        if not is_instance_valid(interactable):
-            continue
+	for interactable in nearby_interactables:
+		if not is_instance_valid(interactable):
+			continue
 
-        var distance := global_position.distance_to(interactable.global_position)
+		var distance := global_position.distance_to(interactable.global_position)
 
-        if distance < closest_distance:
-            closest_distance = distance
-            closest_interactable = interactable
+		if distance < closest_distance:
+			closest_distance = distance
+			closest_interactable = interactable
 
-    if closest_interactable != null and closest_interactable.has_method("interact"):
-        closest_interactable.interact(self)
+	if closest_interactable != null and closest_interactable.has_method("interact"):
+		closest_interactable.interact(self)
 
 
 func _on_interaction_zone_area_entered(area: Area2D) -> void:
-    if area.is_in_group("interactable") and area not in nearby_interactables:
-        nearby_interactables.append(area)
+	if area.is_in_group("interactable") and area not in nearby_interactables:
+		nearby_interactables.append(area)
 
 
 func _on_interaction_zone_area_exited(area: Area2D) -> void:
-    nearby_interactables.erase(area)
+	nearby_interactables.erase(area)
 
 
 func _on_climb_area_body_entered(body: Node2D) -> void:
-    if body == self:
-        is_on_ladder = true
+	if body == self:
+		is_on_ladder = true
 
 
 func _on_climb_area_body_exited(body: Node2D) -> void:
-    if body == self:
-        is_on_ladder = false
+	if body == self:
+		is_on_ladder = false
+
+
+func _on_crystal_body_entered(body: Node2D) -> void:
+	pass # Replace with function body.
+
+
+func _on_crystal_body_exited(body: Node2D) -> void:
+	pass # Replace with function body.
