@@ -72,7 +72,7 @@ offset_bottom = 50.0
 color = Color(0.9277033, 0.7020667, 0.6276224, 1)
 
 [node name="Platform1" type="StaticBody2D" parent="." unique_id=819765043]
-position = Vector2(700, 500)
+position = Vector2(804, 500)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform1" unique_id=254209430]
 shape = SubResource("RectangleShape2D_nmncv")
@@ -84,6 +84,7 @@ offset_top = -20.0
 offset_right = 140.0
 offset_bottom = 20.0
 color = Color(0.02745098, 1, 1, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="TestBoss" type="Area2D" parent="." unique_id=379389219 groups=["damage_zone", "stunnable"]]
 position = Vector2(550, 470)
