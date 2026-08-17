@@ -4,8 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://cxm2h1eyb1h43" path="res://assets/images/Full_bg_1920x1080.png" id="1_fngju"]
 [ext_resource type="Texture2D" uid="uid://benj3wb1tcaiq" path="res://assets/images/Tileset.png" id="2_5o1mp"]
 [ext_resource type="PackedScene" uid="uid://00atclpf5h7f" path="res://scenes/player/player.tscn" id="3_5o1mp"]
+[ext_resource type="Script" uid="uid://cnoibrgmqql0h" path="res://scenes/player/torch_dummy.gd" id="4_7uxs1"]
 [ext_resource type="Texture2D" uid="uid://b7md7wg6atx3c" path="res://assets/images/Ladder.png" id="4_spwf2"]
 [ext_resource type="PackedScene" uid="uid://m5c2qrseg1i0" path="res://assets/objects/crystal.tscn" id="5_3lh42"]
+[ext_resource type="Texture2D" uid="uid://dtokq48ep0tro" path="res://assets/images/gurdian/flying_demon/IDLE.png" id="5_7uxs1"]
 [ext_resource type="Script" uid="uid://83lqxc0g42i7" path="res://scenes/levels/level_1/heart_ui.gd" id="7_31rk5"]
 [ext_resource type="Texture2D" uid="uid://j1wrh0ceae3i" path="res://assets/images/Objects.png" id="7_vmhy7"]
 [ext_resource type="AudioStream" uid="uid://c618tkfxq3feg" path="res://assets/audio/ta-da_yrvBrlS.mp3" id="8_58uyj"]
@@ -932,6 +934,45 @@ size = Vector2(38, 218)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_58uyj"]
 bg_color = Color(0.8056404, 0.753003, 0.07967176, 1)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3lh42"]
+size = Vector2(62, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bc7d7"]
+atlas = ExtResource("5_7uxs1")
+region = Rect2(0, 0, 81, 71)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ij3k"]
+atlas = ExtResource("5_7uxs1")
+region = Rect2(81, 0, 81, 71)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b25gh"]
+atlas = ExtResource("5_7uxs1")
+region = Rect2(162, 0, 81, 71)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ojvjm"]
+atlas = ExtResource("5_7uxs1")
+region = Rect2(243, 0, 81, 71)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vmhy7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bc7d7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ij3k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b25gh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ojvjm")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
 [node name="Level1" type="Node2D" unique_id=186242714]
 script = ExtResource("1_3lh42")
 
@@ -1164,6 +1205,20 @@ region_rect = Rect2(1202.6387, 208.38455, 33.943726, 31.873978)
 
 [node name="CongratulationsSound" type="AudioStreamPlayer" parent="." unique_id=1238962301]
 stream = ExtResource("8_58uyj")
+
+[node name="TestBoss" type="Area2D" parent="." unique_id=29302345 groups=["damage_zone", "stunnable"]]
+position = Vector2(696, 434)
+script = ExtResource("4_7uxs1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestBoss" unique_id=1337811876]
+position = Vector2(-4, 6)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_3lh42")
+
+[node name="DummyVisual" type="AnimatedSprite2D" parent="TestBoss" unique_id=120032526]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_vmhy7")
+animation = &"idle"
 
 [connection signal="body_entered" from="Ladder/ClimbArea" to="Player" method="_on_climb_area_body_entered"]
 [connection signal="body_exited" from="Ladder/ClimbArea" to="Player" method="_on_climb_area_body_exited"]
