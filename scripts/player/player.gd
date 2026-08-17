@@ -34,6 +34,8 @@ var torch_cooldown_time_left := 0.0
 
 
 func _ready() -> void:
+	add_to_group("player")
+	
 	spawn_position = global_position
 	health_changed.emit(health, MAX_HEALTH)
 
@@ -156,6 +158,7 @@ func reset_for_level() -> void:
 
 
 func _on_hurt_box_area_entered(area: Area2D) -> void:
+	print("HurtBox entered by: ", area.name, " | in damage_zone group: ", area.is_in_group("damage_zone"))
 	if area.is_in_group("damage_zone"):
 		take_damage()
 
