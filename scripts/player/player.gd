@@ -25,6 +25,8 @@ var facing_right := true
 var torch_active := false
 var torch_flash_time_left := 0.0
 var torch_cooldown_time_left := 0.0
+var controls_locked := false
+var recoil_time_left := 0.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hurt_box: Area2D = $HurtBox
@@ -48,7 +50,25 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_update_torch(delta)
+	
+	if recoil_time_left > 0.0:
+		recoil_time_left -= delta
 
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+
+		move_and_slide()
+		return
+		
+	if controls_locked:
+		velocity.x = 0.0
+
+		if not is_on_floor():
+			velocity += get_gravity() * delta
+
+		move_and_slide()
+		return
+		
 	if is_invincible:
 		invincibility_time_left -= delta
 		animated_sprite.modulate.a = 0.45 if int(invincibility_time_left * 10.0) % 2 == 0 else 1.0
@@ -190,3 +210,18 @@ func _on_interaction_zone_area_entered(area: Area2D) -> void:
 
 func _on_interaction_zone_area_exited(area: Area2D) -> void:
 	nearby_interactables.erase(area)
+
+func set_controls_locked(locked: bool) -> void:
+	controls_locked = locked
+
+	if locked:
+		velocity.x = 0.0
+		
+func push_back_from(source_position: Vector2) -> void:
+	var direction := signf(global_position.x - source_position.x)
+
+	if direction == 0.0:
+		direction = -1.0
+
+	velocity = Vector2(direction * 420.0, -180.0)
+	recoil_time_left = 0.25
