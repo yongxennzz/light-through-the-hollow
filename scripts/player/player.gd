@@ -17,6 +17,7 @@ const TORCH_COOLDOWN_DURATION := 3.0
 
 var health := MAX_HEALTH
 var is_invincible := false
+var is_on_ladder := false
 var invincibility_time_left := 0.0
 var spawn_position := Vector2.ZERO
 var nearby_interactables: Array[Area2D] = []
@@ -27,6 +28,7 @@ var torch_flash_time_left := 0.0
 var torch_cooldown_time_left := 0.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var jump_sound: AudioStreamPlayer2D = $JumpSound
 @onready var hurt_box: Area2D = $HurtBox
 @onready var torch_zone: Area2D = $TorchZone
 @onready var flashlight: Sprite2D = $Flashlight
@@ -57,11 +59,16 @@ func _physics_process(delta: float) -> void:
 			is_invincible = false
 			animated_sprite.modulate.a = 1.0
 
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+	if is_on_ladder:
+		var climb_direction := Input.get_axis("move_up", "move_down")
+		velocity.y = climb_direction * WALK_SPEED
+	else:
+		if not is_on_floor():
+			velocity += get_gravity() * delta
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+		jump_sound.play()
 
 	if Input.is_action_just_pressed("drop_down") and is_on_floor():
 		position.y += 16
@@ -129,6 +136,7 @@ func _update_torch(delta: float) -> void:
 		if torch_cooldown_time_left <= 0.0:
 			torch_ready.emit()
 
+
 func take_damage(amount: int = 1) -> void:
 	if is_invincible:
 		return
@@ -190,3 +198,21 @@ func _on_interaction_zone_area_entered(area: Area2D) -> void:
 
 func _on_interaction_zone_area_exited(area: Area2D) -> void:
 	nearby_interactables.erase(area)
+
+
+func _on_climb_area_body_entered(body: Node2D) -> void:
+	if body == self:
+		is_on_ladder = true
+
+
+func _on_climb_area_body_exited(body: Node2D) -> void:
+	if body == self:
+		is_on_ladder = false
+
+
+func _on_crystal_body_entered(body: Node2D) -> void:
+	pass # Replace with function body.
+
+
+func _on_crystal_body_exited(body: Node2D) -> void:
+	pass # Replace with function body.

@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dtmkieiipko0g" path="res://scripts/ui/exit_button.gd" id="4_m1kxf"]
 [ext_resource type="Script" uid="uid://vtcllptnud23" path="res://scripts/ui/options_button.gd" id="4_uhagc"]
 [ext_resource type="Script" uid="uid://b7r2261rjy6mw" path="res://scripts/ui/credits_button.gd" id="4_x2yvf"]
+[ext_resource type="Texture2D" uid="uid://bdc38783jixlc" path="res://assets/images/woodlog2.png" id="7_btxxm"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7vrkn"]
 texture = ExtResource("1_1g8jr")
@@ -14,21 +15,44 @@ modulate_color = Color(0.8118375, 0.8118375, 0.8118375, 1)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fu7sn"]
 texture = ExtResource("2_1g8jr")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rhts7"]
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-shadow_color = Color(0, 0, 0, 0.27058825)
-shadow_size = 6
-shadow_offset = Vector2(0, 3.4)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btxxm"]
+texture = ExtResource("7_btxxm")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7vrkn"]
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ayp64"]
+texture = ExtResource("7_btxxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_otr3d"]
+texture = ExtResource("7_btxxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7suek"]
+texture = ExtResource("7_btxxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wb0q5"]
+texture = ExtResource("7_btxxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y2j7i"]
+texture = ExtResource("7_btxxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8ekit"]
+texture = ExtResource("7_btxxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q85j6"]
+texture = ExtResource("7_btxxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y1h5l"]
+texture = ExtResource("7_btxxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n4uci"]
+texture = ExtResource("7_btxxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8g5eo"]
+texture = ExtResource("7_btxxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pw24t"]
+texture = ExtResource("7_btxxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_877pj"]
+texture = ExtResource("7_btxxm")
 
 [node name="MainMenu" type="Control" unique_id=894088806]
 layout_mode = 3
@@ -67,46 +91,58 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -189.0
-offset_top = -69.625
+offset_top = -110.0
 offset_right = 189.0
 offset_bottom = 255.625
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 7
+theme_override_constants/separation = -68
 
 [node name="StartButton" type="Button" parent="VBoxContainer" unique_id=74738971]
+custom_minimum_size = Vector2(250, 150)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 33
-theme_override_styles/normal = SubResource("StyleBoxFlat_rhts7")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7vrkn")
+theme_override_styles/normal = SubResource("StyleBoxTexture_btxxm")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ayp64")
+theme_override_styles/hover = SubResource("StyleBoxTexture_otr3d")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_7suek")
 text = "Start Game"
 script = ExtResource("3_x2yvf")
 
 [node name="OptionsButton" type="Button" parent="VBoxContainer" unique_id=1120963646]
+custom_minimum_size = Vector2(250, 150)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 33
-theme_override_styles/normal = SubResource("StyleBoxFlat_rhts7")
+theme_override_styles/normal = SubResource("StyleBoxTexture_wb0q5")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_y2j7i")
+theme_override_styles/hover = SubResource("StyleBoxTexture_8ekit")
 text = "Options"
 script = ExtResource("4_uhagc")
 
 [node name="CreditsButton" type="Button" parent="VBoxContainer" unique_id=288151310]
+custom_minimum_size = Vector2(250, 150)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 33
-theme_override_styles/normal = SubResource("StyleBoxFlat_rhts7")
+theme_override_styles/normal = SubResource("StyleBoxTexture_q85j6")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_y1h5l")
+theme_override_styles/hover = SubResource("StyleBoxTexture_n4uci")
 text = "Credits"
 script = ExtResource("4_x2yvf")
 
 [node name="ExitButton" type="Button" parent="VBoxContainer" unique_id=179994108]
+custom_minimum_size = Vector2(250, 150)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 33
-theme_override_styles/normal = SubResource("StyleBoxFlat_rhts7")
+theme_override_styles/normal = SubResource("StyleBoxTexture_8g5eo")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_pw24t")
+theme_override_styles/hover = SubResource("StyleBoxTexture_877pj")
 text = "Exit"
 script = ExtResource("4_m1kxf")

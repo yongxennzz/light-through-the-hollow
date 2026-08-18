@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dnam53qtcbkyj" path="res://assets/images/mainmenu_bg.jpg" id="1_h46an"]
 [ext_resource type="Texture2D" uid="uid://x1ioe0lbifox" path="res://assets/images/credits_title.png" id="2_gl0iw"]
+[ext_resource type="Texture2D" uid="uid://bdc38783jixlc" path="res://assets/images/woodlog2.png" id="3_gl0iw"]
 [ext_resource type="Script" uid="uid://c4wbwohf7l7tn" path="res://scripts/ui/back_button.gd" id="3_pxp4k"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2m7a6"]
@@ -11,15 +12,14 @@ modulate_color = Color(0.8146782, 0.81467867, 0.81467843, 1)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rmtb2"]
 texture = ExtResource("2_gl0iw")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1io8x"]
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-shadow_color = Color(0, 0, 0, 0.27058825)
-shadow_size = 6
-shadow_offset = Vector2(0, 3.4)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pxp4k"]
+texture = ExtResource("3_gl0iw")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gl0iw"]
+texture = ExtResource("3_gl0iw")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1io8x"]
+texture = ExtResource("3_gl0iw")
 
 [node name="Control" type="Control" unique_id=36870943]
 layout_mode = 3
@@ -101,7 +101,9 @@ grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 33
-theme_override_styles/normal = SubResource("StyleBoxFlat_1io8x")
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("StyleBoxTexture_pxp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_gl0iw")
+theme_override_styles/hover = SubResource("StyleBoxTexture_1io8x")
 text = "Back"
 script = ExtResource("3_pxp4k")
