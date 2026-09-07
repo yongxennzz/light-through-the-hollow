@@ -1258,11 +1258,65 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_napug")
 text = "\"You Win!\""
 
+<<<<<<< Updated upstream
 [node name="bush5" type="Sprite2D" parent="." unique_id=601946451]
 position = Vector2(1867, 462)
 texture = ExtResource("7_vmhy7")
 region_enabled = true
 region_rect = Rect2(675.9088, 251.19278, 59.5401, 57.58795)
+=======
+[node name="PauseCanvasLayer" type="CanvasLayer" parent="." unique_id=1749972105]
+process_mode = 3
+script = ExtResource("13_wfdrs")
+
+[node name="PauseButton" type="Button" parent="PauseCanvasLayer" unique_id=892828379]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -352.0
+offset_right = -16.0
+offset_bottom = -300.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_hhmec")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_1jeig")
+theme_override_styles/hover = SubResource("StyleBoxTexture_wfdrs")
+
+[node name="PausePanel" type="Panel" parent="PauseCanvasLayer" unique_id=536802202]
+visible = false
+offset_left = 408.0
+offset_top = 192.0
+offset_right = 880.0
+offset_bottom = 480.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wfdrs")
+
+[node name="ResumeButton" type="Button" parent="PauseCanvasLayer/PausePanel" unique_id=1029055531]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 8.0
+offset_right = 360.0
+offset_bottom = 144.0
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxTexture_ldw0e")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_rmnd1")
+theme_override_styles/hover = SubResource("StyleBoxTexture_wloe5")
+text = "Resume"
+
+[node name="ExitButton" type="Button" parent="PauseCanvasLayer/PausePanel" unique_id=2381238]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 128.0
+offset_right = 360.0
+offset_bottom = 272.0
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxTexture_8spg0")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_5d3u7")
+theme_override_styles/hover = SubResource("StyleBoxTexture_41r28")
+text = "Exit Game"
+>>>>>>> Stashed changes
 
 [connection signal="body_entered" from="Ladder/ClimbArea" to="Player" method="_on_climb_area_body_entered"]
 [connection signal="body_exited" from="Ladder/ClimbArea" to="Player" method="_on_climb_area_body_exited"]
