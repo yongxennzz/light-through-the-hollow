@@ -1298,6 +1298,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_1jeig")
 theme_override_styles/hover = SubResource("StyleBoxTexture_wfdrs")
 
 [node name="PausePanel" type="Panel" parent="PauseCanvasLayer" unique_id=536802202]
+visible = false
 offset_left = 408.0
 offset_top = 192.0
 offset_right = 880.0
