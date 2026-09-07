@@ -23,10 +23,11 @@ size = Vector2(100, 120)
 [node name="PlayerTestLevel" type="Node2D" unique_id=1886576204]
 
 [node name="Player" parent="." unique_id=1621341147 instance=ExtResource("1_uu86x")]
+visible = false
 position = Vector2(300, 300)
 
 [node name="Guardian" parent="." unique_id=385479496 node_paths=PackedStringArray("patrol_points") instance=ExtResource("2_j7efj")]
-position = Vector2(-520, -98)
+position = Vector2(-625, -115)
 patrol_points = [NodePath("../PatrolPointA"), NodePath("../PatrolPointB")]
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=226636824]

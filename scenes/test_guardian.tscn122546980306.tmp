@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://cauj45rrsiiby"]
+
+[ext_resource type="PackedScene" uid="uid://00atclpf5h7f" path="res://scenes/player/player.tscn" id="1_2n481"]
+[ext_resource type="PackedScene" uid="uid://cqcfbb8y3unow" path="res://scenes/guardian/guardian.tscn" id="2_1av6i"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7h3u0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j6pgk"]
+size = Vector2(1989.5, 42.125)
+
+[node name="TestScene" type="Node2D" unique_id=1531700108]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=769919132]
+physics_material_override = SubResource("PhysicsMaterial_7h3u0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=67780970]
+position = Vector2(995.25, 715.0625)
+shape = SubResource("RectangleShape2D_j6pgk")
+
+[node name="ColorRect" type="ColorRect" parent="StaticBody2D" unique_id=1103820773]
+offset_top = 686.0
+offset_right = 1987.0
+offset_bottom = 718.0
+
+[node name="PatrolA" type="Node2D" parent="." unique_id=1762429833]
+position = Vector2(3, 641)
+
+[node name="PatrolB" type="Node2D" parent="." unique_id=969109989]
+position = Vector2(1212, 641)
+
+[node name="Guardian" parent="." unique_id=385479496 instance=ExtResource("2_1av6i")]
+
+[node name="Player" parent="." unique_id=1621341147 instance=ExtResource("1_2n481")]
+position = Vector2(640, 364)
