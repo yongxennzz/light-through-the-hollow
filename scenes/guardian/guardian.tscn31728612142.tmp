@@ -319,7 +319,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_610o1")
 }],
-"loop": true,
+"loop": false,
 "name": &"ChaseRun",
 "speed": 10.0
 }, {
@@ -403,7 +403,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_g28x5")
 }],
-"loop": true,
+"loop": false,
 "name": &"PatrolRun",
 "speed": 8.0
 }, {
@@ -443,8 +443,9 @@ animations = [{
 "speed": 8.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_d048r"]
-size = Vector2(54, 38)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5k2jw"]
+radius = 95.0
+height = 232.0
 
 [node name="Guardian" type="CharacterBody2D" unique_id=1362690702]
 script = ExtResource("1_wcu5v")
@@ -458,10 +459,9 @@ texture_filter = 1
 position = Vector2(292, 355)
 scale = Vector2(4.6369576, 5.098957)
 sprite_frames = SubResource("SpriteFrames_fmkjd")
-animation = &"ChaseIdle"
+animation = &"PatrolIdle"
 
 [node name="VisionRayCast" type="RayCast2D" parent="." unique_id=279853224]
-target_position = Vector2(782, 288)
 
 [node name="TorchHurtArea" type="Area2D" parent="." unique_id=896779869]
 script = ExtResource("3_f7isl")
@@ -475,8 +475,8 @@ polygon = PackedVector2Array(-3, -9, 787.8936, 482, 0, 644)
 position = Vector2(290, 350)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDamageArea" unique_id=1569045837]
-position = Vector2(96, 14)
-shape = SubResource("RectangleShape2D_d048r")
+position = Vector2(4, 7)
+shape = SubResource("CapsuleShape2D_5k2jw")
 
 [node name="StunTimer" type="Timer" parent="." unique_id=1060794129]
 
