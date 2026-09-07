@@ -12,6 +12,9 @@
 [ext_resource type="AudioStream" uid="uid://c618tkfxq3feg" path="res://assets/audio/ta-da_yrvBrlS.mp3" id="8_58uyj"]
 [ext_resource type="Texture2D" uid="uid://cp6cw1ikfi5rp" path="res://assets/images/hearticon.png" id="8_w3g2g"]
 [ext_resource type="Script" uid="uid://xfjhkl0q1jlq" path="res://scenes/levels/level_1/canvas_layer.gd" id="11_napug"]
+[ext_resource type="Texture2D" uid="uid://ct14buh5cgtqu" path="res://assets/images/pause.png" id="13_1jeig"]
+[ext_resource type="Script" uid="uid://bj1vx7yjrrms0" path="res://scenes/levels/level_1/pause_canvas_layer.gd" id="13_wfdrs"]
+[ext_resource type="Texture2D" uid="uid://bdc38783jixlc" path="res://assets/images/woodlog2.png" id="14_hhmec"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5o1mp"]
 texture = ExtResource("2_5o1mp")
@@ -970,6 +973,40 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hhmec"]
+texture = ExtResource("13_1jeig")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1jeig"]
+texture = ExtResource("13_1jeig")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wfdrs"]
+texture = ExtResource("13_1jeig")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wfdrs"]
+bg_color = Color(0.46666667, 0.6, 0.84313726, 0.85490197)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ldw0e"]
+texture = ExtResource("14_hhmec")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rmnd1"]
+texture = ExtResource("14_hhmec")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wloe5"]
+texture = ExtResource("14_hhmec")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8spg0"]
+texture = ExtResource("14_hhmec")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5d3u7"]
+texture = ExtResource("14_hhmec")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_41r28"]
+texture = ExtResource("14_hhmec")
+
 [node name="Level1" type="Node2D" unique_id=186242714]
 script = ExtResource("1_3lh42")
 
@@ -1010,7 +1047,7 @@ position = Vector2(421, 494)
 shape = SubResource("RectangleShape2D_7uxs1")
 
 [node name="Crystal" parent="." unique_id=881881325 instance=ExtResource("5_3lh42")]
-position = Vector2(2748, 571)
+position = Vector2(2752, 568)
 scale = Vector2(0.5, 0.5)
 
 [node name="Tree1" type="Sprite2D" parent="." unique_id=303934472]
@@ -1182,40 +1219,114 @@ animation = &"idle"
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1186535160]
 script = ExtResource("11_napug")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=1733147266]
-custom_minimum_size = Vector2(20, 20)
-offset_left = 29.0
-offset_top = 43.0
-offset_right = 82.0
-offset_bottom = 93.0
+[node name="HealthContainer" type="HBoxContainer" parent="CanvasLayer" unique_id=226922777]
+offset_right = 182.0
+offset_bottom = 53.0
+
+[node name="Heart" type="TextureRect" parent="CanvasLayer/HealthContainer" unique_id=1729410543]
+custom_minimum_size = Vector2(58, 32)
+layout_mode = 2
 texture = ExtResource("8_w3g2g")
 expand_mode = 1
 
-[node name="HealthLabel" type="Label" parent="CanvasLayer" unique_id=1557402741]
-offset_left = 94.0
-offset_top = 50.0
-offset_right = 163.0
-offset_bottom = 121.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 24
-text = "x3
-"
+[node name="Heart2" type="TextureRect" parent="CanvasLayer/HealthContainer" unique_id=1733147266]
+custom_minimum_size = Vector2(58, 32)
+layout_mode = 2
+texture = ExtResource("8_w3g2g")
+expand_mode = 1
 
-[node name="WinLabel" type="Label" parent="CanvasLayer" unique_id=1816181566]
+[node name="Heart3" type="TextureRect" parent="CanvasLayer/HealthContainer" unique_id=1588063615]
+custom_minimum_size = Vector2(58, 32)
+layout_mode = 2
+texture = ExtResource("8_w3g2g")
+expand_mode = 1
+
+[node name="WinCanvasLayer" type="CanvasLayer" parent="." unique_id=1154030891]
+layer = 10
+
+[node name="Panel" type="Panel" parent="WinCanvasLayer" unique_id=1647034325]
 visible = false
+anchors_preset = -1
+anchor_left = 1.35625
+anchor_top = 0.42222223
+anchor_right = 1.746875
+anchor_bottom = 0.5611111
+offset_left = -1336.0
+offset_top = -54.0
+offset_right = -1336.0
+offset_bottom = -54.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="WinCanvasLayer/Panel" unique_id=1471720811]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -41.0
-offset_top = -11.5
-offset_right = 41.0
-offset_bottom = 11.5
+offset_left = -66.0
+offset_top = -26.0
+offset_right = 71.0
+offset_bottom = 23.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(100, 25)
-text = "\"You Win!\""
+theme_override_font_sizes/font_size = 29
+text = "Congratulations!
+Level 1 Complete!"
+
+[node name="PauseCanvasLayer" type="CanvasLayer" parent="." unique_id=1749972105]
+process_mode = 3
+script = ExtResource("13_wfdrs")
+
+[node name="PauseButton" type="Button" parent="PauseCanvasLayer" unique_id=892828379]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -352.0
+offset_right = -16.0
+offset_bottom = -300.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_hhmec")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_1jeig")
+theme_override_styles/hover = SubResource("StyleBoxTexture_wfdrs")
+
+[node name="PausePanel" type="Panel" parent="PauseCanvasLayer" unique_id=536802202]
+offset_left = 408.0
+offset_top = 192.0
+offset_right = 880.0
+offset_bottom = 480.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wfdrs")
+
+[node name="ResumeButton" type="Button" parent="PauseCanvasLayer/PausePanel" unique_id=1029055531]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 8.0
+offset_right = 360.0
+offset_bottom = 144.0
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxTexture_ldw0e")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_rmnd1")
+theme_override_styles/hover = SubResource("StyleBoxTexture_wloe5")
+text = "Resume"
+
+[node name="ExitButton" type="Button" parent="PauseCanvasLayer/PausePanel" unique_id=2381238]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 128.0
+offset_right = 360.0
+offset_bottom = 272.0
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxTexture_8spg0")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_5d3u7")
+theme_override_styles/hover = SubResource("StyleBoxTexture_41r28")
+text = "Exit Game"
 
 [connection signal="body_entered" from="Ladder/ClimbArea" to="Player" method="_on_climb_area_body_entered"]
 [connection signal="body_exited" from="Ladder/ClimbArea" to="Player" method="_on_climb_area_body_exited"]
