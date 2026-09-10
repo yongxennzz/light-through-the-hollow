@@ -9,7 +9,7 @@ const MAX_HEALTH := 3
 const WALK_SPEED := 180.0
 const RUN_SPEED := 300.0
 const DAMAGE_ESCAPE_SPEED := 450.0
-const JUMP_VELOCITY := -420.0
+const JUMP_VELOCITY := -480.0
 const INVINCIBILITY_DURATION := 2.0
 
 const TORCH_FLASH_DURATION := 0.25
@@ -26,6 +26,7 @@ var torch_active := false
 var torch_flash_time_left := 0.0
 var torch_cooldown_time_left := 0.0
 var controls_locked := false
+var machine_minigame_active := false
 var recoil_time_left := 0.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -50,12 +51,12 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_update_torch(delta)
-	
-	if recoil_time_left > 0.0:
-		recoil_time_left -= delta
 
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+	if recoil_time_left > 0.0:
+		recoil_time_left = maxf(recoil_time_left - delta, 0.0)
+
+		if not is_on_floor():
+			velocity += get_gravity() * delta
 
 		move_and_slide()
 		return
@@ -80,16 +81,23 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	var jump_requested := Input.is_action_just_pressed("jump")
+
+	# Space performs timing hits while repairing.
+	# Up Arrow remains available for jumping away.
+	if machine_minigame_active and Input.is_physical_key_pressed(KEY_SPACE):
+		jump_requested = false
+
+	if jump_requested and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
 	if Input.is_action_just_pressed("drop_down") and is_on_floor():
 		position.y += 16
 
-	if Input.is_action_just_pressed("torchlight"):
+	if Input.is_action_just_pressed("torchlight") and not machine_minigame_active:
 		use_torch()
 
-	if Input.is_action_just_pressed("interact") and not torch_active:
+	if Input.is_action_just_pressed("interact") and not torch_active and not machine_minigame_active:
 		interact_with_nearest()
 
 	var direction := Input.get_axis("move_left", "move_right")

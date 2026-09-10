@@ -16,6 +16,7 @@ const DIAL_RADIUS := 140.0
 func _ready() -> void:
 	visible = false
 	set_process(false)
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func open() -> void:
@@ -76,9 +77,26 @@ func _set_stage() -> void:
 
 
 func _draw() -> void:
-	var centre := size * 0.5
+	# Draw a compact panel at the upper-right of the screen.
+	var panel_scale := 0.8
+	var panel_size := Vector2(430, 510)
+	var panel_position := Vector2(
+		size.x - panel_size.x * panel_scale - 16.0,
+		16.0
+	)
 
-	draw_rect(Rect2(Vector2.ZERO, size), Color(0.02, 0.03, 0.08, 0.88))
+	draw_set_transform(
+		panel_position,
+		0.0,
+		Vector2(panel_scale, panel_scale)
+	)
+
+	var centre := Vector2(215, 220)
+
+	draw_rect(
+		Rect2(Vector2.ZERO, panel_size),
+		Color(0.02, 0.03, 0.08, 0.92)
+	)
 	draw_circle(centre, DIAL_RADIUS, Color(0.08, 0.12, 0.18, 1.0))
 	draw_arc(centre, DIAL_RADIUS, 0.0, TAU, 80, Color(0.35, 0.45, 0.60, 1.0), 5.0)
 
@@ -100,3 +118,9 @@ func _draw() -> void:
 	draw_string(font, centre + Vector2(-165, -190), "GENERATOR CALIBRATION", HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color.WHITE)
 	draw_string(font, centre + Vector2(-145, 205), "Press SPACE inside the green zone", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.WHITE)
 	draw_string(font, centre + Vector2(-48, 240), "Progress: %d / 3" % hits, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color(0.20, 1.0, 0.55, 1.0))
+
+func close() -> void:
+	active = false
+	visible = false
+	set_process(false)
+	hits = 0	

@@ -25,6 +25,7 @@ func _on_body_entered(body: Node2D) -> void:
 	if not active:
 		return
 
-	if body is CharacterBody2D:
-		monitoring = false
+	if body.is_in_group("player"):
+		active = false
+		set_deferred("monitoring", false)
 		entered.emit()

@@ -25,10 +25,10 @@ func _on_body_entered(body: Node2D) -> void:
 	if not available or was_collected:
 		return
 
-	if body is CharacterBody2D:
+	if body.is_in_group("player"):
 		was_collected = true
 		available = false
-		monitoring = false
+		set_deferred("monitoring", false)
 		visible = false
 		collected.emit()
 		print("Refinery Crystal collected")
