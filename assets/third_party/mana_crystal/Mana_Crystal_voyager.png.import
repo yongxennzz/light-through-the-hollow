@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bn84rmgc7hncx"
-path="res://.godot/imported/portal1_frame_4.png-25d07c51ac56dd69af0f56f6cc112ab8.ctex"
+uid="uid://bx0unv7mi14uj"
+path="res://.godot/imported/Mana_Crystal_voyager.png-e668fab6a2e39adaa036a4cc414f7838.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/third_party/crystal_portal/Frames/portal1_frame_4.png"
-dest_files=["res://.godot/imported/portal1_frame_4.png-25d07c51ac56dd69af0f56f6cc112ab8.ctex"]
+source_file="res://assets/third_party/mana_crystal/Mana_Crystal_voyager.png"
+dest_files=["res://.godot/imported/Mana_Crystal_voyager.png-e668fab6a2e39adaa036a4cc414f7838.ctex"]
 
 [params]
 

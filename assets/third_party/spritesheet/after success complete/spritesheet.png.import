@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://241uw4bu8f1d"
-path="res://.godot/imported/portal1_frame_1.png-c0db543f5c32bcdcdfbc30ee664e380d.ctex"
+uid="uid://b0jhpc1ovs2ov"
+path="res://.godot/imported/spritesheet.png-4ef3d8059bd73296c9dd451606d307b6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/third_party/crystal_portal/Frames/portal1_frame_1.png"
-dest_files=["res://.godot/imported/portal1_frame_1.png-c0db543f5c32bcdcdfbc30ee664e380d.ctex"]
+source_file="res://assets/third_party/spritesheet/after success complete/spritesheet.png"
+dest_files=["res://.godot/imported/spritesheet.png-4ef3d8059bd73296c9dd451606d307b6.ctex"]
 
 [params]
 

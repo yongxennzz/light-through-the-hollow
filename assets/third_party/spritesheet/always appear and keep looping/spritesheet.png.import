@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d1aie7eatedct"
-path="res://.godot/imported/Portal-Spinning.png-6ea5798ec141a43bd8daa51130b2f002.ctex"
+uid="uid://wrcydo6da8xm"
+path="res://.godot/imported/spritesheet.png-95a6f5c6b5ab1ed777a3011464b6c32f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/third_party/animated_portal/Portal-Spinning.png"
-dest_files=["res://.godot/imported/Portal-Spinning.png-6ea5798ec141a43bd8daa51130b2f002.ctex"]
+source_file="res://assets/third_party/spritesheet/always appear and keep looping/spritesheet.png"
+dest_files=["res://.godot/imported/spritesheet.png-95a6f5c6b5ab1ed777a3011464b6c32f.ctex"]
 
 [params]
 

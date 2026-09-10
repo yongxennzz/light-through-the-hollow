@@ -75,6 +75,7 @@ func _on_generator_repair_requested(machine: Area2D) -> void:
 
 
 func _cancel_calibration() -> void:
+	player.block_jump_until_release()
 	calibration_game.close()
 	player.machine_minigame_active = false
 	active_machine = null

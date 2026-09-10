@@ -9,7 +9,7 @@ const MAX_HEALTH := 3
 const WALK_SPEED := 180.0
 const RUN_SPEED := 300.0
 const DAMAGE_ESCAPE_SPEED := 450.0
-const JUMP_VELOCITY := -480.0
+@export var jump_velocity: float = -550.0
 const INVINCIBILITY_DURATION := 2.0
 
 const TORCH_FLASH_DURATION := 0.25
@@ -27,6 +27,7 @@ var torch_flash_time_left := 0.0
 var torch_cooldown_time_left := 0.0
 var controls_locked := false
 var machine_minigame_active := false
+var jump_blocked_until_release := false
 var recoil_time_left := 0.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -83,13 +84,22 @@ func _physics_process(delta: float) -> void:
 
 	var jump_requested := Input.is_action_just_pressed("jump")
 
-	# Space performs timing hits while repairing.
-	# Up Arrow remains available for jumping away.
-	if machine_minigame_active and Input.is_physical_key_pressed(KEY_SPACE):
+	if jump_blocked_until_release:
+		jump_requested = false
+
+		# Wait until the previous jump input is fully released.
+		# Also block a press-and-release occurring in the same frame.
+		if not Input.is_action_pressed("jump") \
+				and not Input.is_action_just_pressed("jump"):
+			jump_blocked_until_release = false
+
+	# Space is a timing hit while the mini-game is open.
+	if machine_minigame_active \
+			and Input.is_physical_key_pressed(KEY_SPACE):
 		jump_requested = false
 
 	if jump_requested and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+		velocity.y = jump_velocity
 
 	if Input.is_action_just_pressed("drop_down") and is_on_floor():
 		position.y += 16
@@ -233,3 +243,6 @@ func push_back_from(source_position: Vector2) -> void:
 
 	velocity = Vector2(direction * 420.0, -180.0)
 	recoil_time_left = 0.25
+
+func block_jump_until_release() -> void:
+	jump_blocked_until_release = true

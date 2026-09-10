@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cn6eso7hrjww1"
-path="res://.godot/imported/Character_sheet.png-c2b997528e4dd221dd2212dd3f51f354.ctex"
+uid="uid://b5pw4kp32jehe"
+path="res://.godot/imported/spritesheet.png-f1b4c3dc5b5060731bc39bd5aa7b07ff.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/third_party/mecha_stone_golem/Character_sheet.png"
-dest_files=["res://.godot/imported/Character_sheet.png-c2b997528e4dd221dd2212dd3f51f354.ctex"]
+source_file="res://assets/third_party/spritesheet/after 1 fail hit/spritesheet.png"
+dest_files=["res://.godot/imported/spritesheet.png-f1b4c3dc5b5060731bc39bd5aa7b07ff.ctex"]
 
 [params]
 

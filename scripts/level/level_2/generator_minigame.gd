@@ -3,6 +3,20 @@ extends Control
 signal completed
 signal failed
 
+const LOOP_TEXTURE = preload(
+	"res://assets/third_party/spritesheet/always appear and keep looping/spritesheet.png"
+)
+const SUCCESS_TEXTURE = preload(
+	"res://assets/third_party/spritesheet/after success complete/spritesheet.png"
+)
+const FAILURE_TEXTURE = preload(
+	"res://assets/third_party/spritesheet/after 1 fail hit/spritesheet.png"
+)
+
+const DIAL_RADIUS := 140.0
+const LOOP_FPS := 12.0
+const RESULT_FPS := 24.0
+
 var active := false
 var hits := 0
 var needle_angle := -PI / 2.0
@@ -10,7 +24,11 @@ var needle_speed := 2.8
 var target_angle := 0.0
 var target_width := 0.8
 
-const DIAL_RADIUS := 140.0
+var loop_time := 0.0
+var result_time := 0.0
+var showing_result := false
+var result_success := false
+var hit_flash_left := 0.0
 
 
 func _ready() -> void:
@@ -23,6 +41,11 @@ func open() -> void:
 	active = true
 	hits = 0
 	needle_angle = -PI / 2.0
+	loop_time = 0.0
+	result_time = 0.0
+	showing_result = false
+	hit_flash_left = 0.0
+
 	_set_stage()
 	visible = true
 	set_process(true)
@@ -30,39 +53,73 @@ func open() -> void:
 
 
 func _process(delta: float) -> void:
-	needle_angle = fposmod(needle_angle + needle_speed * delta, TAU)
+	loop_time += delta
+	hit_flash_left = maxf(hit_flash_left - delta, 0.0)
+
+	if showing_result:
+		result_time += delta
+
+		var frame_count := 9 if result_success else 12
+		var duration := float(frame_count) / RESULT_FPS
+
+		if result_time >= duration:
+			var succeeded := result_success
+			close()
+
+			if succeeded:
+				completed.emit()
+			else:
+				failed.emit()
+
+			return
+
+	elif active:
+		needle_angle = fposmod(
+			needle_angle + needle_speed * delta,
+			TAU
+		)
+
 	queue_redraw()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not active:
+	if not visible:
 		return
 
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_SPACE:
-		get_viewport().set_input_as_handled()
-		_try_hit()
+	if event is InputEventKey:
+		if event.pressed and not event.echo and event.keycode == KEY_SPACE:
+			get_viewport().set_input_as_handled()
+
+			# Ignore extra timing presses during result effects.
+			if active:
+				_try_hit()
 
 
 func _try_hit() -> void:
-	var difference := absf(wrapf(needle_angle - target_angle, -PI, PI))
+	var difference := absf(
+		wrapf(needle_angle - target_angle, -PI, PI)
+	)
 
 	if difference > target_width:
-		active = false
-		visible = false
-		set_process(false)
-		failed.emit()
+		_begin_result(false)
 		return
 
 	hits += 1
+	hit_flash_left = 0.18
 
 	if hits >= 3:
-		active = false
-		visible = false
-		set_process(false)
-		completed.emit()
+		_begin_result(true)
 		return
 
 	_set_stage()
+	queue_redraw()
+
+
+func _begin_result(succeeded: bool) -> void:
+	active = false
+	showing_result = true
+	result_success = succeeded
+	result_time = 0.0
 	queue_redraw()
 
 
@@ -77,7 +134,6 @@ func _set_stage() -> void:
 
 
 func _draw() -> void:
-	# Draw a compact panel at the upper-right of the screen.
 	var panel_scale := 0.8
 	var panel_size := Vector2(430, 510)
 	var panel_position := Vector2(
@@ -93,13 +149,36 @@ func _draw() -> void:
 
 	var centre := Vector2(215, 220)
 
-	draw_rect(
-		Rect2(Vector2.ZERO, panel_size),
-		Color(0.02, 0.03, 0.08, 0.92)
+	# Permanent dial: the explosion animation fades between loops.
+	draw_circle(
+		centre,
+		DIAL_RADIUS,
+		Color(0.08, 0.12, 0.18, 1.0)
 	)
-	draw_circle(centre, DIAL_RADIUS, Color(0.08, 0.12, 0.18, 1.0))
-	draw_arc(centre, DIAL_RADIUS, 0.0, TAU, 80, Color(0.35, 0.45, 0.60, 1.0), 5.0)
 
+	# Draw the looping artwork underneath the target and needle.
+	if not showing_result:
+		var loop_frame := int(loop_time * LOOP_FPS) % 10
+		_draw_sheet_frame(
+			LOOP_TEXTURE,
+			loop_frame,
+			96,
+			centre,
+			260.0,
+			Color(1.0, 1.0, 1.0, 0.55)
+		)
+
+	var ring_colour := Color(0.35, 0.45, 0.60, 1.0)
+
+	if hit_flash_left > 0.0:
+		ring_colour = Color(0.55, 1.0, 1.0, 1.0)
+
+	draw_arc(
+		centre, DIAL_RADIUS, 0.0, TAU,
+		80, ring_colour, 5.0
+	)
+
+	# Keep the existing green target.
 	draw_arc(
 		centre,
 		DIAL_RADIUS,
@@ -110,17 +189,94 @@ func _draw() -> void:
 		18.0
 	)
 
-	var needle_end := centre + Vector2(cos(needle_angle), sin(needle_angle)) * (DIAL_RADIUS - 15.0)
-	draw_line(centre, needle_end, Color(1.0, 0.82, 0.22, 1.0), 6.0)
+	# Keep the existing needle; freeze it during the result.
+	var needle_end := centre + Vector2(
+		cos(needle_angle), sin(needle_angle)
+	) * (DIAL_RADIUS - 15.0)
+
+	draw_line(
+		centre, needle_end,
+		Color(1.0, 0.82, 0.22, 1.0), 6.0
+	)
 	draw_circle(centre, 12.0, Color.WHITE)
 
+	# Result effect appears over the frozen dial.
+	if showing_result:
+		var frame_count := 9 if result_success else 12
+		var result_frame := mini(
+			int(result_time * RESULT_FPS),
+			frame_count - 1
+		)
+		var texture := SUCCESS_TEXTURE if result_success else FAILURE_TEXTURE
+
+		_draw_sheet_frame(
+			texture,
+			result_frame,
+			64,
+			centre,
+			240.0,
+			Color.WHITE
+		)
+
 	var font := ThemeDB.fallback_font
-	draw_string(font, centre + Vector2(-165, -190), "GENERATOR CALIBRATION", HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color.WHITE)
-	draw_string(font, centre + Vector2(-145, 205), "Press SPACE inside the green zone", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.WHITE)
-	draw_string(font, centre + Vector2(-48, 240), "Progress: %d / 3" % hits, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color(0.20, 1.0, 0.55, 1.0))
+	var instruction := "Press SPACE inside the green zone"
+
+	if showing_result:
+		instruction = "CALIBRATION COMPLETE!" if result_success else "CALIBRATION FAILED!"
+
+	draw_string(
+		font,
+		centre + Vector2(-165, -190),
+		"GENERATOR CALIBRATION",
+		HORIZONTAL_ALIGNMENT_LEFT,
+		-1, 24, Color.WHITE
+	)
+	draw_string(
+		font,
+		centre + Vector2(-145, 205),
+		instruction,
+		HORIZONTAL_ALIGNMENT_LEFT,
+		-1, 18, Color.WHITE
+	)
+	draw_string(
+		font,
+		centre + Vector2(-48, 240),
+		"Progress: %d / 3" % hits,
+		HORIZONTAL_ALIGNMENT_LEFT,
+		-1, 20,
+		Color(0.20, 1.0, 0.55, 1.0)
+	)
+
+
+func _draw_sheet_frame(
+	texture: Texture2D,
+	frame_index: int,
+	cell_size: int,
+	centre: Vector2,
+	display_size: float,
+	tint: Color
+) -> void:
+	var destination := Rect2(
+		centre - Vector2.ONE * display_size * 0.5,
+		Vector2.ONE * display_size
+	)
+	var source := Rect2(
+		float(frame_index * cell_size),
+		0.0,
+		float(cell_size),
+		float(cell_size)
+	)
+
+	draw_texture_rect_region(
+		texture, destination, source, tint
+	)
+
 
 func close() -> void:
 	active = false
+	showing_result = false
 	visible = false
 	set_process(false)
-	hits = 0	
+	hits = 0
+	result_time = 0.0
+	hit_flash_left = 0.0
