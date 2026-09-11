@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtokq48ep0tro"
-path="res://.godot/imported/IDLE.png-384084bcfc3a332168e1e1d2a152db95.ctex"
+uid="uid://bdc38783jixlc"
+path="res://.godot/imported/woodlog2.png-9a5cb428fa958676eaca41fd8b3d3691.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/gurdian/flying_demon/IDLE.png"
-dest_files=["res://.godot/imported/IDLE.png-384084bcfc3a332168e1e1d2a152db95.ctex"]
+source_file="res://assets/images/woodlog2.png"
+dest_files=["res://.godot/imported/woodlog2.png-9a5cb428fa958676eaca41fd8b3d3691.ctex"]
 
 [params]
 

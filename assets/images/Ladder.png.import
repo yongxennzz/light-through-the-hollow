@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtokq48ep0tro"
-path="res://.godot/imported/IDLE.png-384084bcfc3a332168e1e1d2a152db95.ctex"
+uid="uid://b7md7wg6atx3c"
+path="res://.godot/imported/Ladder.png-fbced2547d08c15f8296fe79bb3f1669.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/gurdian/flying_demon/IDLE.png"
-dest_files=["res://.godot/imported/IDLE.png-384084bcfc3a332168e1e1d2a152db95.ctex"]
+source_file="res://assets/images/Ladder.png"
+dest_files=["res://.godot/imported/Ladder.png-fbced2547d08c15f8296fe79bb3f1669.ctex"]
 
 [params]
 

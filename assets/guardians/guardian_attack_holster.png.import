@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtokq48ep0tro"
-path="res://.godot/imported/IDLE.png-384084bcfc3a332168e1e1d2a152db95.ctex"
+uid="uid://127va5t7poay"
+path="res://.godot/imported/guardian_attack_holster.png-2173b06ff5173f11f6d7de49a54a2c39.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/gurdian/flying_demon/IDLE.png"
-dest_files=["res://.godot/imported/IDLE.png-384084bcfc3a332168e1e1d2a152db95.ctex"]
+source_file="res://assets/guardians/guardian_attack_holster.png"
+dest_files=["res://.godot/imported/guardian_attack_holster.png-2173b06ff5173f11f6d7de49a54a2c39.ctex"]
 
 [params]
 

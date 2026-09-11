@@ -5,21 +5,19 @@ signal player_died
 signal torch_ready
 signal torch_cooldown_started(cooldown_seconds: float)
 
-@export_enum("Easy", "Medium", "Hard")
-var difficulty: int = 0
-
-var max_health: int = 3
+const MAX_HEALTH := 3
 const WALK_SPEED := 180.0
 const RUN_SPEED := 300.0
 const DAMAGE_ESCAPE_SPEED := 450.0
-@export var jump_velocity: float = -550.0
+const JUMP_VELOCITY := -420.0
 const INVINCIBILITY_DURATION := 2.0
 
 const TORCH_FLASH_DURATION := 0.25
 const TORCH_COOLDOWN_DURATION := 3.0
 
-var health: int = 3
+var health := MAX_HEALTH
 var is_invincible := false
+var is_on_ladder := false
 var invincibility_time_left := 0.0
 var spawn_position := Vector2.ZERO
 var nearby_interactables: Array[Area2D] = []
@@ -28,24 +26,20 @@ var facing_right := true
 var torch_active := false
 var torch_flash_time_left := 0.0
 var torch_cooldown_time_left := 0.0
-var controls_locked := false
-var machine_minigame_active := false
-var jump_blocked_until_release := false
-var recoil_time_left := 0.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var jump_sound: AudioStreamPlayer2D = $JumpSound
 @onready var hurt_box: Area2D = $HurtBox
 @onready var torch_zone: Area2D = $TorchZone
 @onready var flashlight: Sprite2D = $Flashlight
 @onready var interaction_zone: Area2D = $InteractionZone
 
 
-
 func _ready() -> void:
-	max_health = 3 - clampi(difficulty, 0, 2)
-	health = max_health
+	add_to_group("player")
+	
 	spawn_position = global_position
-	health_changed.emit(health, max_health)
+	health_changed.emit(health, MAX_HEALTH)
 
 	hurt_box.area_entered.connect(Callable(self, "_on_hurt_box_area_entered"))
 	torch_zone.area_entered.connect(Callable(self, "_on_torch_zone_area_entered"))
@@ -59,24 +53,6 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	_update_torch(delta)
 
-	if recoil_time_left > 0.0:
-		recoil_time_left = maxf(recoil_time_left - delta, 0.0)
-
-		if not is_on_floor():
-			velocity += get_gravity() * delta
-
-		move_and_slide()
-		return
-		
-	if controls_locked:
-		velocity.x = 0.0
-
-		if not is_on_floor():
-			velocity += get_gravity() * delta
-
-		move_and_slide()
-		return
-		
 	if is_invincible:
 		invincibility_time_left -= delta
 		animated_sprite.modulate.a = 0.45 if int(invincibility_time_left * 10.0) % 2 == 0 else 1.0
@@ -85,35 +61,24 @@ func _physics_process(delta: float) -> void:
 			is_invincible = false
 			animated_sprite.modulate.a = 1.0
 
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+	if is_on_ladder:
+		var climb_direction := Input.get_axis("move_up", "move_down")
+		velocity.y = climb_direction * WALK_SPEED
+	else:
+		if not is_on_floor():
+			velocity += get_gravity() * delta
 
-	var jump_requested := Input.is_action_just_pressed("jump")
-
-	if jump_blocked_until_release:
-		jump_requested = false
-
-		# Wait until the previous jump input is fully released.
-		# Also block a press-and-release occurring in the same frame.
-		if not Input.is_action_pressed("jump") \
-				and not Input.is_action_just_pressed("jump"):
-			jump_blocked_until_release = false
-
-	# Space is a timing hit while the mini-game is open.
-	if machine_minigame_active \
-			and Input.is_physical_key_pressed(KEY_SPACE):
-		jump_requested = false
-
-	if jump_requested and is_on_floor():
-		velocity.y = jump_velocity
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+		jump_sound.play()
 
 	if Input.is_action_just_pressed("drop_down") and is_on_floor():
 		position.y += 16
 
-	if Input.is_action_just_pressed("torchlight") and not machine_minigame_active:
+	if Input.is_action_just_pressed("torchlight"):
 		use_torch()
 
-	if Input.is_action_just_pressed("interact") and not torch_active and not machine_minigame_active:
+	if Input.is_action_just_pressed("interact") and not torch_active:
 		interact_with_nearest()
 
 	var direction := Input.get_axis("move_left", "move_right")
@@ -173,12 +138,13 @@ func _update_torch(delta: float) -> void:
 		if torch_cooldown_time_left <= 0.0:
 			torch_ready.emit()
 
+
 func take_damage(amount: int = 1) -> void:
 	if is_invincible:
 		return
 
 	health = maxi(health - amount, 0)
-	health_changed.emit(health, max_health)
+	health_changed.emit(health, MAX_HEALTH)
 
 	if health <= 0:
 		player_died.emit()
@@ -190,16 +156,17 @@ func take_damage(amount: int = 1) -> void:
 
 
 func reset_for_level() -> void:
-	health = max_health
+	health = MAX_HEALTH
 	is_invincible = false
 	invincibility_time_left = 0.0
 	animated_sprite.modulate.a = 1.0
 	global_position = spawn_position
 	velocity = Vector2.ZERO
-	health_changed.emit(health, max_health)
+	health_changed.emit(health, MAX_HEALTH)
 
 
 func _on_hurt_box_area_entered(area: Area2D) -> void:
+	print("HurtBox entered by: ", area.name, " | in damage_zone group: ", area.is_in_group("damage_zone"))
 	if area.is_in_group("damage_zone"):
 		take_damage()
 
@@ -235,20 +202,20 @@ func _on_interaction_zone_area_entered(area: Area2D) -> void:
 func _on_interaction_zone_area_exited(area: Area2D) -> void:
 	nearby_interactables.erase(area)
 
-func set_controls_locked(locked: bool) -> void:
-	controls_locked = locked
 
-	if locked:
-		velocity.x = 0.0
-		
-func push_back_from(source_position: Vector2) -> void:
-	var direction := signf(global_position.x - source_position.x)
+func _on_climb_area_body_entered(body: Node2D) -> void:
+	if body == self:
+		is_on_ladder = true
 
-	if direction == 0.0:
-		direction = -1.0
 
-	velocity = Vector2(direction * 420.0, -180.0)
-	recoil_time_left = 0.25
+func _on_climb_area_body_exited(body: Node2D) -> void:
+	if body == self:
+		is_on_ladder = false
 
-func block_jump_until_release() -> void:
-	jump_blocked_until_release = true
+
+func _on_crystal_body_entered(body: Node2D) -> void:
+	pass # Replace with function body.
+
+
+func _on_crystal_body_exited(body: Node2D) -> void:
+	pass # Replace with function body.
