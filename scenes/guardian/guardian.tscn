@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cguxtk1jwr8d2" path="res://scripts/guardian/guardian.gd" id="1_wcu5v"]
 [ext_resource type="Texture2D" uid="uid://127va5t7poay" path="res://assets/guardians/guardian_attack_holster.png" id="2_d048r"]
-[ext_resource type="Script" uid="uid://dc0pnmiykctdq" path="res://scripts/guardian/torch_hurt_area.gd" id="3_f7isl"]
 [ext_resource type="Texture2D" uid="uid://c7lukgqh5e1w0" path="res://assets/guardians/guardian_chase_idle.png" id="3_ffq5k"]
 [ext_resource type="Texture2D" uid="uid://bug4payfdh1yq" path="res://assets/guardians/guardian_chase_run.png" id="4_lnjmy"]
 [ext_resource type="Texture2D" uid="uid://cpnfr7crdscv3" path="res://assets/guardians/guardian_discover.png" id="5_asdke"]
@@ -446,40 +445,40 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d048r"]
 size = Vector2(54, 38)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_kdndp"]
+radius = 586.885
+
 [node name="Guardian" type="CharacterBody2D" unique_id=1362690702]
 script = ExtResource("1_wcu5v")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=933801472]
-position = Vector2(293, 359)
 shape = SubResource("RectangleShape2D_cpsn1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1832992287]
 texture_filter = 1
-position = Vector2(292, 355)
 scale = Vector2(4.6369576, 5.098957)
 sprite_frames = SubResource("SpriteFrames_fmkjd")
-animation = &"ChaseIdle"
-
-[node name="VisionRayCast" type="RayCast2D" parent="." unique_id=279853224]
-target_position = Vector2(782, 288)
-
-[node name="TorchHurtArea" type="Area2D" parent="." unique_id=896779869]
-script = ExtResource("3_f7isl")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TorchHurtArea" unique_id=2119072967]
-position = Vector2(2.0959911, 0)
-scale = Vector2(0.934393, 0.8450421)
-polygon = PackedVector2Array(-3, -9, 787.8936, 482, 0, 644)
-
-[node name="PlayerDamageArea" type="Area2D" parent="." unique_id=1538632638]
-position = Vector2(290, 350)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDamageArea" unique_id=1569045837]
-position = Vector2(96, 14)
-shape = SubResource("RectangleShape2D_d048r")
+animation = &"ReturnToPatrol"
 
 [node name="StunTimer" type="Timer" parent="." unique_id=1060794129]
 
 [node name="PatrolTimer" type="Timer" parent="." unique_id=129200797]
 
 [node name="DetectionTimer" type="Timer" parent="." unique_id=1003317760]
+
+[node name="FacingRoot" type="Area2D" parent="." unique_id=455426941]
+
+[node name="PlayerDamageArea" type="Area2D" parent="FacingRoot" unique_id=1538632638]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/PlayerDamageArea" unique_id=1569045837]
+position = Vector2(75, 1)
+shape = SubResource("RectangleShape2D_d048r")
+
+[node name="VisionRayCast" type="RayCast2D" parent="FacingRoot" unique_id=279853224]
+position = Vector2(18, -31)
+target_position = Vector2(300, -2)
+
+[node name="ObstacleCheck" type="RayCast2D" parent="FacingRoot" unique_id=1023244354]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot" unique_id=1363622710]
+shape = SubResource("CircleShape2D_kdndp")

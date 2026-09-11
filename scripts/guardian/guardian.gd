@@ -1,206 +1,259 @@
 extends CharacterBody2D
-enum State {IDLE, PATROL, DISCOVER, CHASE, RETURNTOPATROL, ATTACK}
-@export var gravity: float = 900.0
-@export var vision_enabled: bool = true
-@export var vision_range: float = 900.0
 
-#chase
-@export var chase_speed: float = 150.0
+# ---------- 状态机 ----------
+enum State { IDLE, PATROL, DISCOVER, CHASE, ATTACK, RETURNTOPATROL }
+var state: State = State.PATROL
 
-#attack
-@export var attack_range: float = 450.0
-
-#Patrol
-@export var route_ab: Array[Node2D] = []  # PatrolA <-> PatrolB
-@export var route_bc: Array[Node2D] = []  # PatrolB <-> PatrolC
+# ---------- Patrol 设置 ----------
+@export var patrol_points: Array[Node2D] = []
 @export var patrol_speed: float = 80.0
-@export var patrol_wait_time: float = 1.5
+@export var chase_speed: float = 140.0
+@export var arrive_threshold: float = 6.0
 
-var patrol_points: Array[Node2D] = []
-var current_state: State = State.IDLE
-var current_patrol_index: int = 0
-var player: Node2D = null
+var patrol_index: int = 0
+var patrol_dir: int = -1
 var patrol_waiting: bool = false
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var vision_ray: RayCast2D = $VisionRayCast
-@onready var damage_shape: CollisionShape2D = $PlayerDamageArea/CollisionShape2D
+
+# ---------- 追击 / 攻击 ----------
+var target: Node2D = null
+@export var attack_range: float = 40.0
+@export var attack_cooldown: float = 1.0
+var attack_timer: float = 0.0
+
+@export var discover_duration: float = 0.6
+var discover_timer: float = 0.0
+
+# ---------- 悬停晃动 ----------
+@export var hover_amplitude: float = 4.0
+@export var hover_speed: float = 2.0
+var hover_time: float = 0.0
+var debug_timer: float = 0.0
 
 
 func _ready() -> void:
-	patrol_points = route_ab
-	call_deferred("_find_player")
-	$PlayerDamageArea.add_to_group("damage_zone")
-	damage_shape.disabled = true
-	if not patrol_points.is_empty():
-		current_state = State.PATROL
-		sprite.play("PatrolIdle")
-	else:
-		current_state = State.IDLE
-		sprite.play("PatrolIdle")
-	print("Starting state: ", current_state, " | patrol_points count: ", patrol_points.size())
+	motion_mode = MOTION_MODE_FLOATING
+	add_to_group("guardian")
 
-func _find_player() -> void:
-	player = get_tree().get_first_node_in_group("player")
-	print("Player found: ", player)
-	if player == null:
-		push_warning("Guardian: No player found")
+
+func alert_to_noise() -> void:
+	if player_ref == null:
+		player_ref = get_tree().get_first_node_in_group("player")
+	if player_ref != null:
+		target = player_ref
+		state = State.DISCOVER
+		print("Guardian alerted by noise!")
+
 
 func _physics_process(delta: float) -> void:
-	if not is_on_floor():
-		velocity.y += gravity * delta
+	hover_time += delta
+	_check_vision()
+	_check_noise()
 
-	update_vision()
-
-	match current_state:
+	match state:
 		State.IDLE:
-			process_idle(delta)
+			velocity = Vector2.ZERO
 		State.PATROL:
-			process_patrol(delta)
+			_do_patrol(delta)
+			_play_anim("PatrolRun" if velocity.length() > 5.0 else "PatrolIdle")
 		State.DISCOVER:
-			process_discover(delta)
+			velocity = Vector2.ZERO
+			_play_anim("Discover")
+			discover_timer += delta
+			if discover_timer >= discover_duration:
+				discover_timer = 0.0
+				state = State.CHASE
 		State.CHASE:
-			process_chase(delta)
+			_do_chase(delta)
+			_play_anim("ChaseRun" if velocity.length() > 5.0 else "ChaseIdle")
 		State.ATTACK:
-			process_attack(delta)
+			_do_attack(delta)
+			_play_anim("Attack")
 		State.RETURNTOPATROL:
-			process_return_to_patrol(delta)
-	
-	print("State: ", current_state, " | Animation: ", sprite.animation, " | Velocity.x: ", velocity.x)
-	
-	if current_state == State.ATTACK and sprite.animation == "Attack":
-		damage_shape.disabled = not (sprite.frame in [4, 5])
-	else:
-		damage_shape.disabled = true
+			_do_patrol(delta)
+			_play_anim("ReturnToPatrol")
+
 	move_and_slide()
 
-func process_idle(delta: float) -> void:
-	velocity.x = 0
-	if sprite.animation != "PatrolIdle":
-		sprite.play("PatrolIdle")
 
-func update_vision() -> void:
-	if not vision_enabled:
-		return
-	if player == null:
-		return
-	var distance_to_player = global_position.distance_to(player.global_position)
-
-	if distance_to_player > vision_range:
-		if current_state == State.CHASE:
-			start_return_to_patrol()
-			print("Player out of range -> Return to patrol")
-		return
-
-	vision_ray.target_position = vision_ray.to_local(player.global_position)
-	vision_ray.force_raycast_update()
-	var can_see_player = (
-		vision_ray.is_colliding()
-		and vision_ray.get_collider() == player
-	)
-
-	if can_see_player:
-		if current_state == State.PATROL or current_state == State.IDLE:
-			start_discover()
-	else:
-		if current_state == State.CHASE:
-			print("Lost Player -> Return to patrol")
-			start_return_to_patrol()
-
-func process_patrol(delta: float) -> void:
+# ---------- PATROL ----------
+func _do_patrol(_delta: float) -> void:
 	if patrol_points.is_empty():
-		velocity.x = 0
+		velocity = Vector2.ZERO
 		return
 
-	if patrol_waiting:
-		velocity.x = 0
+	var target_pos: Vector2 = patrol_points[patrol_index].global_position
+	var to_target := target_pos - global_position
+
+	if to_target.length() <= arrive_threshold:
+		# 从 RETURNTOPATROL 回到最近点后,切回正常巡逻
+		if state == State.RETURNTOPATROL:
+			state = State.PATROL
+
+		patrol_index += patrol_dir
+		if patrol_index >= patrol_points.size() - 1:
+			patrol_index = patrol_points.size() - 1
+			patrol_dir = -1
+		elif patrol_index <= 0:
+			patrol_index = 0
+			patrol_dir = 1
 		return
 
-	var target: Node2D = patrol_points[current_patrol_index]
-	var horizontal_distance: float = abs(target.global_position.x - global_position.x)
+	var move_dir := to_target.normalized()
+	var hover_offset := sin(hover_time * hover_speed) * hover_amplitude
+	velocity = move_dir * patrol_speed + Vector2(0, hover_offset)
+	_face_direction(velocity.x)
 
-	if horizontal_distance < 10.0 and is_on_floor():
-		velocity.x = 0
-		start_patrol_wait()
+
+# ---------- CHASE ----------
+@export var give_up_distance: float = 2000.0
+
+func _do_chase(_delta: float) -> void:
+	if target == null:
+		_lose_target()
 		return
 
-	if sprite.animation != "PatrolRun":
-		sprite.play("PatrolRun")
+	var to_target := target.global_position - global_position
 
-	var direction: float = sign(target.global_position.x - global_position.x)
-	velocity.x = direction * patrol_speed
-	sprite.flip_h = direction < 0
+	if to_target.length() > give_up_distance:
+		_lose_target()
+		return
 
-func start_patrol_wait() -> void:
-	patrol_waiting = true
-	sprite.play("PatrolIdle")
-	await get_tree().create_timer(patrol_wait_time).timeout
-	current_patrol_index = (current_patrol_index + 1) % patrol_points.size()
+	if to_target.length() <= attack_range:
+		state = State.ATTACK
+		velocity = Vector2.ZERO
+		return
+
+	velocity = to_target.normalized() * chase_speed
+	_face_direction(velocity.x)
+
+
+# ---------- ATTACK ----------
+func _do_attack(delta: float) -> void:
+	velocity = Vector2.ZERO
+
+	if target == null:
+		_lose_target()
+		return
+
+	var dist := target.global_position.distance_to(global_position)
+	if dist > attack_range:
+		state = State.CHASE
+		return
+
+	attack_timer += delta
+	if attack_timer >= attack_cooldown:
+		attack_timer = 0.0
+		_perform_attack()
+
+
+func _perform_attack() -> void:
+	if target != null and target.has_method("take_damage"):
+		target.take_damage(1)
+
+
+# ---------- 跟丢玩家:找最近的巡逻点,回去继续巡逻 ----------
+func _lose_target() -> void:
+	target = null
+	if patrol_points.is_empty():
+		state = State.IDLE
+		return
+
+	var nearest_index := 0
+	var nearest_dist := INF
+	for i in patrol_points.size():
+		var d := global_position.distance_to(patrol_points[i].global_position)
+		if d < nearest_dist:
+			nearest_dist = d
+			nearest_index = i
+
+	patrol_index = nearest_index
+	state = State.RETURNTOPATROL
+
+
+@onready var vision_raycast: RayCast2D = $FacingRoot/VisionRayCast
+@export var vision_length: float = 400.0
+@export var noise_radius: float = 150.0
+@onready var player_ref: Node2D = get_tree().get_first_node_in_group("player")
+
+func _check_noise() -> void:
+	if target != null or player_ref == null:
+		return
+	if player_ref.velocity.length() > 250.0:
+		var dist := global_position.distance_to(player_ref.global_position)
+		if dist <= noise_radius:
+			target = player_ref
+			state = State.DISCOVER
+
+
+func _check_vision() -> void:
+	vision_raycast.target_position = Vector2(vision_length, 0)
+	vision_raycast.force_raycast_update()
+
+	if vision_raycast.is_colliding():
+		var body := vision_raycast.get_collider()
+		if body.is_in_group("player") and target == null:
+			target = body
+			state = State.DISCOVER
+
+
+# ---------- 视野侦测----------
+func _on_vision_area_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player"):
+		target = body
+		state = State.DISCOVER
+
+
+func _on_vision_area_body_exited(body: Node2D) -> void:
+	if body == target:
+		_lose_target()
+
+
+# ---------- 共用: 面向移动方向 ----------
+@onready var facing_root: Node2D = $FacingRoot
+
+func _play_anim(anim_name: String) -> void:
+	if sprite.animation != anim_name:
+		sprite.play(anim_name)
+
+func _face_direction(vx: float) -> void:
+	if abs(vx) > 0.1:
+		var facing_left := vx < 0
+		sprite.flip_h = facing_left
+		facing_root.scale.x = -1.0 if facing_left else 1.0
+
+
+# ---------- 避障(可选) ----------
+@onready var obstacle_check: RayCast2D = $FacingRoot/ObstacleCheck
+
+func _avoid_obstacle(desired_velocity: Vector2) -> Vector2:
+	if desired_velocity.length() < 0.01:
+		return desired_velocity
+
+	obstacle_check.target_position = desired_velocity.normalized() * 24
+	obstacle_check.force_raycast_update()
+
+	if obstacle_check.is_colliding():
+		var normal := obstacle_check.get_collision_normal()
+		return desired_velocity.slide(normal)
+
+	return desired_velocity
+
+
+# ---------- 切换区域 ----------
+func reset_to_zone(new_position: Vector2, new_route: Array[Node2D]) -> void:
+	visible = true
+	velocity = Vector2.ZERO
 	patrol_waiting = false
-
-func switch_patrol_route(new_route: Array[Node2D]) -> void:
-	print("switch_patrol_route called | current_state before: ", current_state)
+	target = null
+	global_position = new_position
 	patrol_points = new_route
-	current_patrol_index = 0
-	patrol_waiting = false
-
-
-func process_chase(delta: float) -> void:
-	if sprite.animation != "ChaseRun":
-		sprite.play("ChaseRun")
-	if player == null:
-		velocity.x = 0
-		return
-
-	var horizontal_distance: float = abs(player.global_position.x - global_position.x)
-	var direction: float = sign(player.global_position.x - global_position.x)
-	print("Horizontal Distance: ", horizontal_distance, " | Direction: ", direction)
-
-	if horizontal_distance <= attack_range:
-		start_attack()
-		return
-
-	velocity.x = direction * chase_speed
-	sprite.flip_h = direction < 0
-
-func start_discover() -> void:
-	current_state = State.DISCOVER
-	if player != null:
-		sprite.flip_h = player.global_position.x < global_position.x
-	sprite.play("Discover")
-	print("Player Detected -> Discover")
-	await sprite.animation_finished
-	if current_state == State.DISCOVER:
-		current_state = State.CHASE
-		print("Discover finished -> Chase")
-
-func process_discover(delta: float) -> void:
-	velocity.x = 0
-
-func start_return_to_patrol() -> void:
-	current_state = State.RETURNTOPATROL
-	velocity.x = 0
-	sprite.play("ReturnToPatrol")
-	print("-> Return to Patrol")
-	await sprite.animation_finished
-	if current_state == State.RETURNTOPATROL:
-		current_state = State.PATROL if not patrol_points.is_empty() else State.IDLE
-		print("Return finished -> Patrol")
-
-func process_return_to_patrol(delta: float) -> void:
-	velocity.x = 0
-
-func start_attack() -> void:
-	current_state = State.ATTACK
-	velocity.x = 0
-	if player != null:
-		sprite.flip_h = player.global_position.x < global_position.x
-	sprite.play("Attack")
-	print("In range -> Attack")
-	await sprite.animation_finished
-	if current_state == State.ATTACK:
-		current_state = State.CHASE
-
-
-func process_attack(delta: float) -> void:
-	velocity.x = 0
+	patrol_index = 0
+	patrol_dir = -1
+	if not patrol_points.is_empty():
+		state = State.PATROL
+		sprite.play("PatrolIdle")
+	else:
+		state = State.IDLE
+		sprite.play("PatrolIdle")

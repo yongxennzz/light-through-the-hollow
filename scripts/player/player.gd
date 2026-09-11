@@ -62,11 +62,12 @@ func _physics_process(delta: float) -> void:
 			animated_sprite.modulate.a = 1.0
 
 	if is_on_ladder:
-		var climb_direction := Input.get_axis("move_up", "move_down")
+		var climb_direction := Input.get_axis("ui_up", "ui_down")
 		velocity.y = climb_direction * WALK_SPEED
 	else:
 		if not is_on_floor():
 			velocity += get_gravity() * delta
+
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
@@ -204,13 +205,17 @@ func _on_interaction_zone_area_exited(area: Area2D) -> void:
 
 
 func _on_climb_area_body_entered(body: Node2D) -> void:
+	print("CLIMB ENTERED: ", body.name)
 	if body == self:
 		is_on_ladder = true
+		print("is_on_ladder = TRUE")
 
 
 func _on_climb_area_body_exited(body: Node2D) -> void:
+	print("CLIMB EXITED: ", body.name)
 	if body == self:
 		is_on_ladder = false
+		print("is_on_ladder = FALSE")
 
 
 func _on_crystal_body_entered(body: Node2D) -> void:
@@ -218,4 +223,8 @@ func _on_crystal_body_entered(body: Node2D) -> void:
 
 
 func _on_crystal_body_exited(body: Node2D) -> void:
+	pass # Replace with function body.
+
+
+func _on_ladder_body_entered(body: Node2D) -> void:
 	pass # Replace with function body.
