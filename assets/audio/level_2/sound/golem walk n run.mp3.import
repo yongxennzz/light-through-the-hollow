@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://hsjj032f2xxg"
+path="res://.godot/imported/golem walk n run.mp3-6479d4962eee42ecb4e9afcba36e11ec.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/level_2/sound/golem walk n run.mp3"
+dest_files=["res://.godot/imported/golem walk n run.mp3-6479d4962eee42ecb4e9afcba36e11ec.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
