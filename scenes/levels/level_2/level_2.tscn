@@ -1,7 +1,6 @@
 [gd_scene format=4 uid="uid://b1r7ad7ygwsws"]
 
 [ext_resource type="Script" uid="uid://mq8a3g50nl3f" path="res://scripts/level/level_2/level_2_controller.gd" id="1_e74df"]
-[ext_resource type="PackedScene" uid="uid://00atclpf5h7f" path="res://scenes/player/player.tscn" id="1_f1k8i"]
 [ext_resource type="Texture2D" uid="uid://dlwnlvve8isu3" path="res://assets/third_party/atomic_realm_mine/2_Mine_Tileset_1_Background.png" id="1_v0jb6"]
 [ext_resource type="Texture2D" uid="uid://b2p5v4tnchtll" path="res://assets/third_party/crystal_cave/style_D/PNG/bg1.png" id="2_iup6o"]
 [ext_resource type="Texture2D" uid="uid://csdw4nw2gwasm" path="res://assets/third_party/atomic_realm_mine/1_Mine_Tileset_1.png" id="2_lp8so"]
@@ -26,11 +25,16 @@
 [ext_resource type="Texture2D" uid="uid://5woum2pg21k6" path="res://assets/third_party/crystal_cave/style_C/PNG/terrain_platform_center.png" id="17_0is2v"]
 [ext_resource type="Texture2D" uid="uid://bv3krqtclw5q" path="res://assets/third_party/guardian_spawn/crystal_5_64x64_12f_20d.png" id="18_odxlg"]
 [ext_resource type="Texture2D" uid="uid://dbhwrqsxhp5ue" path="res://assets/third_party/orange_guardian/Golem_1_attack.png" id="19_ekcpv"]
+[ext_resource type="Script" uid="uid://c7w5nbo88r8s8" path="res://scripts/player/level_2_player.gd" id="19_iuov7"]
 [ext_resource type="Script" uid="uid://bejvkjnkl2pi" path="res://scenes/levels/level_2/mine_guardian.gd" id="19_x3a3q"]
+[ext_resource type="Texture2D" uid="uid://brgevvume7uc0" path="res://assets/images/player/male_idle.png.png" id="20_wixie"]
 [ext_resource type="Texture2D" uid="uid://4sh6b3f6v6d2" path="res://assets/third_party/orange_guardian/Golem_1_idle.png" id="20_wlqsf"]
+[ext_resource type="Texture2D" uid="uid://c20tnddmd05ta" path="res://assets/images/player/male_run_1.png.png" id="21_ub75r"]
 [ext_resource type="Texture2D" uid="uid://dr5rij346wb7k" path="res://assets/third_party/orange_guardian/Golem_1_walk.png" id="21_x3a3q"]
+[ext_resource type="Texture2D" uid="uid://bt2pqd1pnar8j" path="res://assets/images/player/male_run_2.png.png" id="22_atiqe"]
 [ext_resource type="Texture2D" uid="uid://bfgijc4jmjek4" path="res://assets/third_party/guardian_teleport/9.png" id="22_wlqsf"]
 [ext_resource type="Texture2D" uid="uid://bx0unv7mi14uj" path="res://assets/third_party/mana_crystal/Mana_Crystal_voyager.png" id="23_0is2v"]
+[ext_resource type="Texture2D" uid="uid://balhutnu1xbd5" path="res://assets/images/player/Flashlight.png" id="23_kgnbp"]
 [ext_resource type="Script" uid="uid://drmnqifns65qc" path="res://scenes/levels/level_2/noise_trap.gd" id="24_rbtc1"]
 [ext_resource type="Texture2D" uid="uid://dtom4m3wikbsm" path="res://assets/third_party/noise_trap/Bear_Trap.png" id="25_6qah1"]
 [ext_resource type="AudioStream" uid="uid://d1ln36lvax7vd" path="res://assets/audio/level_2/sound/golem attack.mp3" id="31_lanud"]
@@ -345,11 +349,39 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_75vfm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_wixie")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21_ub75r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_atiqe")
+}],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5owdk"]
 size = Vector2(28, 44)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ytkhg"]
 size = Vector2(28, 44)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p47bc"]
+size = Vector2(180, 110)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_75vfm"]
+size = Vector2(180, 140)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_83l3i"]
 size = Vector2(210, 170)
@@ -1338,23 +1370,50 @@ scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_wlqsf")
 animation = &"active"
 
-[node name="Player" parent="Gameplay" unique_id=1621341147 groups=["player"] instance=ExtResource("1_f1k8i")]
+[node name="Player" type="CharacterBody2D" parent="Gameplay" unique_id=1621341147 groups=["player"]]
 position = Vector2(51, 577)
 platform_on_leave = 2
+script = ExtResource("19_iuov7")
 
-[node name="AnimatedSprite2D" parent="Gameplay/Player" index="0" unique_id=1183876143]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Gameplay/Player" unique_id=1183876143]
 scale = Vector2(0.09, 0.09)
+sprite_frames = SubResource("SpriteFrames_75vfm")
+animation = &"idle"
 
-[node name="CollisionShape2D" parent="Gameplay/Player" index="1" unique_id=1474464238]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Player" unique_id=1474464238]
 position = Vector2(0, 6)
 shape = SubResource("RectangleShape2D_5owdk")
 
-[node name="Camera2D" parent="Gameplay/Player" index="2" unique_id=701641954]
+[node name="Camera2D" type="Camera2D" parent="Gameplay/Player" unique_id=701641954]
 enabled = false
+limit_left = 0
+limit_top = 0
+limit_right = 1280
+limit_bottom = 720
 
-[node name="CollisionShape2D" parent="Gameplay/Player/HurtBox" parent_id_path=PackedInt32Array(1621341147, 876677933) index="0" unique_id=1446733760]
+[node name="HurtBox" type="Area2D" parent="Gameplay/Player" unique_id=876677933]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Player/HurtBox" unique_id=1446733760]
 position = Vector2(0, 6)
 shape = SubResource("RectangleShape2D_ytkhg")
+
+[node name="TorchZone" type="Area2D" parent="Gameplay/Player" unique_id=2102887030]
+position = Vector2(120, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Player/TorchZone" unique_id=86224520]
+shape = SubResource("RectangleShape2D_p47bc")
+
+[node name="Flashlight" type="Sprite2D" parent="Gameplay/Player" unique_id=1961871725]
+visible = false
+z_index = 1
+position = Vector2(45, 20)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("23_kgnbp")
+
+[node name="InteractionZone" type="Area2D" parent="Gameplay/Player" unique_id=905313625]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Player/InteractionZone" unique_id=654538197]
+shape = SubResource("RectangleShape2D_75vfm")
 
 [node name="Objectives" type="Node2D" parent="Gameplay" unique_id=107436829]
 
@@ -1683,19 +1742,19 @@ hframes = 4
 position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_w3qjl")
 
-[node name="TrapUpperPlatform" type="Area2D" parent="Gameplay/NoiseTraps" unique_id=481541041]
+[node name="TrapUpperPlatform1" type="Area2D" parent="Gameplay/NoiseTraps" unique_id=481541041]
 position = Vector2(357, 126)
 collision_layer = 0
 script = ExtResource("24_rbtc1")
 route_number = 3
 
-[node name="TrapVisual" type="Sprite2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform" unique_id=1561580917]
+[node name="TrapVisual" type="Sprite2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform1" unique_id=1561580917]
 position = Vector2(0, -11)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("25_6qah1")
 hframes = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform" unique_id=1579202289]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform1" unique_id=1579202289]
 position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_w3qjl")
 
@@ -1719,7 +1778,7 @@ shape = SubResource("RectangleShape2D_w3qjl")
 position = Vector2(800, 187)
 collision_layer = 0
 script = ExtResource("24_rbtc1")
-route_number = 3
+route_number = 4
 
 [node name="TrapVisual" type="Sprite2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform3" unique_id=1762956349]
 position = Vector2(0, -11)
@@ -1735,7 +1794,7 @@ shape = SubResource("RectangleShape2D_w3qjl")
 position = Vector2(907, 186)
 collision_layer = 0
 script = ExtResource("24_rbtc1")
-route_number = 3
+route_number = 4
 
 [node name="TrapVisual" type="Sprite2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform4" unique_id=299329647]
 position = Vector2(0, -11)
@@ -1832,11 +1891,13 @@ position = Vector2(640, 360)
 [node name="LevelAudio" type="Node" parent="." unique_id=472321707]
 
 [node name="CaveMusic" type="AudioStreamPlayer" parent="LevelAudio" unique_id=715521659]
+process_mode = 3
 stream = ExtResource("36_6uc5t")
 volume_db = -18.0
 autoplay = true
 
 [node name="CaveAmbience" type="AudioStreamPlayer" parent="LevelAudio" unique_id=184585728]
+process_mode = 3
 stream = ExtResource("37_gr62i")
 volume_db = -26.0
 autoplay = true
@@ -1879,22 +1940,6 @@ patch_margin_top = 24
 patch_margin_right = 24
 patch_margin_bottom = 24
 
-[node name="Title" type="Label" parent="LevelIntro/Screen/IntroPanel" unique_id=347541030]
-visible = false
-layout_mode = 0
-offset_left = 40.0
-offset_top = 30.0
-offset_right = 560.0
-offset_bottom = 74.0
-
-[node name="Message" type="Label" parent="LevelIntro/Screen/IntroPanel" unique_id=588680839]
-visible = false
-layout_mode = 0
-offset_left = 48.0
-offset_top = 90.0
-offset_right = 552.0
-offset_bottom = 210.0
-
 [node name="ContinueButton" type="Button" parent="LevelIntro/Screen/IntroPanel" unique_id=1053929097]
 layout_mode = 0
 offset_left = 190.0
@@ -1913,5 +1958,3 @@ mouse_filter = 2
 texture = SubResource("AtlasTexture_vn1k2")
 expand_mode = 1
 stretch_mode = 5
-
-[editable path="Gameplay/Player"]

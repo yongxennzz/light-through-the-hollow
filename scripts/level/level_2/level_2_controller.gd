@@ -15,9 +15,14 @@ var repaired_count := 0
 var previous_health := 3
 var restarting := false
 var menu_music_was_paused := false
+var menu_music_previous_process_mode: int = Node.PROCESS_MODE_INHERIT
 
 func _ready() -> void:
 	menu_music_was_paused = MenuMusic.stream_paused
+	menu_music_previous_process_mode = MenuMusic.process_mode
+
+	# Prevent the intro's pause/unpause from restarting menu music.
+	MenuMusic.process_mode = Node.PROCESS_MODE_ALWAYS
 	MenuMusic.stream_paused = true
 	_pause_menu_music_after_startup()
 	machines = [
@@ -173,7 +178,9 @@ func _show_entrance_portal() -> void:
 
 func _exit_tree() -> void:
 	if is_instance_valid(MenuMusic):
+		MenuMusic.process_mode = menu_music_previous_process_mode
 		MenuMusic.stream_paused = menu_music_was_paused
+
 	if not restarting:
 		intro_seen = false
 func _pause_menu_music_after_startup() -> void:
