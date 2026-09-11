@@ -14,6 +14,8 @@ extends CharacterBody2D
 @onready var teleport_visual: AnimatedSprite2D = $TeleportVisual
 @onready var routes: Node = $"../GuardianRoutes"
 @onready var player: CharacterBody2D = $"../Player"
+@onready var attack_sound: AudioStreamPlayer2D = $AttackSound
+@onready var teleport_sound: AudioStreamPlayer2D = $TeleportSound
 
 var route_index := 0
 var heading_right := false
@@ -37,6 +39,7 @@ var noise_time_left := 0.0
 var investigating := false
 var investigation_x := 0.0
 var investigation_wait_left := 0.0
+
 
 func _ready() -> void:
 	# Exceptions are mutual: neither body can block or push the other.
@@ -69,6 +72,8 @@ func _enter_route(index: int) -> void:
 	route_index = index % routes.get_child_count()
 	var route := routes.get_child(route_index)
 	global_position = route.get_node("Spawn").global_position
+	attack_sound.stop()
+	teleport_sound.play()
 	target_x = route.get_node("LeftEnd").global_position.x
 	velocity = Vector2.ZERO
 	heading_right = false
@@ -93,6 +98,7 @@ func _enter_route(index: int) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	
 	if teleport_left > 0.0:
 		teleport_left = maxf(teleport_left - delta, 0.0)
 		if teleport_left == 0.0:
@@ -132,6 +138,10 @@ func _physics_process(delta: float) -> void:
 		attack_cooldown = 0.8
 		attack_left = 0.45
 		guardian_visual.play("attack")
+
+
+		attack_sound.play(2.0)
+
 		player.take_damage(1)
 		velocity.x = 0.0
 		move_and_slide()
@@ -300,6 +310,7 @@ func stun() -> void:
 	if teleport_left > 0.0 or stun_left > 0.0:
 		return
 	stun_left = stun_duration
+	attack_sound.stop()
 	attack_left = 0.0
 	chasing = false
 	velocity.x = 0.0

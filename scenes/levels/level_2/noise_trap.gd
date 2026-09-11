@@ -2,6 +2,11 @@ extends Area2D
 # Chris — Animated noise-only trap. Never damages the player.
 
 signal noise_emitted(world_position: Vector2, route_number: int)
+const TRAP_AUDIO = preload(
+	"res://assets/audio/level_2/sound/trap.mp3"
+)
+
+var trap_sound: AudioStreamPlayer2D
 
 @export_range(1, 4, 1) var route_number: int = 1
 @export var rearm_delay: float = 3.0
@@ -15,6 +20,13 @@ var elapsed := 0.0
 
 
 func _ready() -> void:
+	trap_sound = AudioStreamPlayer2D.new()
+	trap_sound.name = "TrapSound"
+	trap_sound.stream = TRAP_AUDIO
+	trap_sound.volume_db = -10.0
+	trap_sound.max_distance = 1600.0
+	trap_sound.max_polyphony = 1
+	add_child(trap_sound)
 	add_to_group("noise_traps")
 	body_entered.connect(_on_body_entered)
 
@@ -64,6 +76,6 @@ func _on_body_entered(body: Node2D) -> void:
 
 	var minimum_cycle := maxf(animation_frame_time, 0.01) * 6.0
 	cooldown_left = maxf(rearm_delay, minimum_cycle)
-
+	trap_sound.play()
 	noise_emitted.emit(global_position, route_number)
 	print("Noise trap triggered on route ", route_number)

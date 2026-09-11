@@ -1,6 +1,6 @@
 extends Node2D
 # Chris — Level 2 machine progression and puzzle integration.
-
+static var intro_seen := false
 @export var machine_start_distance: float = 64.0
 @export var machine_cancel_distance: float = 96.0
 
@@ -14,9 +14,12 @@ var active_machine = null
 var repaired_count := 0
 var previous_health := 3
 var restarting := false
-
+var menu_music_was_paused := false
 
 func _ready() -> void:
+	menu_music_was_paused = MenuMusic.stream_paused
+	MenuMusic.stream_paused = true
+	_pause_menu_music_after_startup()
 	machines = [
 		$Gameplay/Objectives/GeneratorMachine,
 		$Gameplay/Objectives/GeneratorMachine2,
@@ -38,7 +41,13 @@ func _ready() -> void:
 	player.player_died.connect(_on_player_died)
 
 	player.machine_minigame_active = false
-	_show_entrance_portal()
+
+	if not intro_seen:
+		intro_seen = true
+		$LevelIntro.show_intro()
+		await $LevelIntro.dismissed
+
+	_show_entrance_portal()	
 
 
 func _physics_process(_delta: float) -> void:
@@ -115,9 +124,12 @@ func _on_calibration_failed() -> void:
 
 
 func _on_health_changed(current_health: int, _maximum: int) -> void:
-	if current_health < previous_health and active_machine != null:
-		_cancel_calibration()
-		print("Repair interrupted by damage")
+	if current_health < previous_health:
+		_play_level_sound(&"PlayerHurtSound")
+
+		if active_machine != null:
+			_cancel_calibration()
+			print("Repair interrupted by damage")
 
 	previous_health = current_health
 
@@ -136,11 +148,15 @@ func _restart_level() -> void:
 
 
 func _on_refinery_crystal_collected() -> void:
+	_play_level_sound(&"CollectSound")
 	portal_exit.activate()
+	_play_level_sound(&"ExitPortalSound")
 	print("Crystal collected. Exit portal activated.")
 
 
 func _on_portal_entered() -> void:
+	$LevelAudio/ExitPortalSound.stop()
+	_play_level_sound(&"LevelCompleteSound")
 	print("Level 2 complete")
 
 func _show_entrance_portal() -> void:
@@ -148,8 +164,28 @@ func _show_entrance_portal() -> void:
 
 	entrance.show()
 	entrance.play("active")
+	_play_level_sound(&"EntrancePortalSound")
 
 	await get_tree().create_timer(2.0, false).timeout
-
+	$LevelAudio/EntrancePortalSound.stop()
 	if is_instance_valid(entrance):
 		entrance.hide()
+
+func _exit_tree() -> void:
+	if is_instance_valid(MenuMusic):
+		MenuMusic.stream_paused = menu_music_was_paused
+	if not restarting:
+		intro_seen = false
+func _pause_menu_music_after_startup() -> void:
+	await get_tree().process_frame
+
+	if is_instance_valid(MenuMusic):
+		MenuMusic.stream_paused = true
+
+func _play_level_sound(sound_name: StringName) -> void:
+	var sound := $LevelAudio.get_node_or_null(
+		NodePath(String(sound_name))
+	) as AudioStreamPlayer
+
+	if sound != null and sound.stream != null:
+		sound.play()

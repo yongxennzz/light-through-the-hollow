@@ -12,6 +12,9 @@ const SUCCESS_TEXTURE = preload(
 const FAILURE_TEXTURE = preload(
 	"res://assets/third_party/spritesheet/after 1 fail hit/spritesheet.png"
 )
+const TEXT_ART = preload(
+	"res://assets/images/ui/calibration/calibration_text_dark_fantasy.png"
+)
 
 const DIAL_RADIUS := 140.0
 const LOOP_FPS := 12.0
@@ -165,7 +168,7 @@ func _draw() -> void:
 			96,
 			centre,
 			260.0,
-			Color(1.0, 1.0, 1.0, 0.55)
+			Color.WHITE
 		)
 
 	var ring_colour := Color(0.35, 0.45, 0.60, 1.0)
@@ -218,33 +221,21 @@ func _draw() -> void:
 			Color.WHITE
 		)
 
-	var font := ThemeDB.fallback_font
-	var instruction := "Press SPACE inside the green zone"
+	_draw_text_art(0, Rect2(24, 24, 382, 42))
+
+	var instruction_index := 1
 
 	if showing_result:
-		instruction = "CALIBRATION COMPLETE!" if result_success else "CALIBRATION FAILED!"
+		instruction_index = 6 if result_success else 7
 
-	draw_string(
-		font,
-		centre + Vector2(-165, -190),
-		"GENERATOR CALIBRATION",
-		HORIZONTAL_ALIGNMENT_LEFT,
-		-1, 24, Color.WHITE
+	_draw_text_art(
+		instruction_index,
+		Rect2(24, 398, 382, 44)
 	)
-	draw_string(
-		font,
-		centre + Vector2(-145, 205),
-		instruction,
-		HORIZONTAL_ALIGNMENT_LEFT,
-		-1, 18, Color.WHITE
-	)
-	draw_string(
-		font,
-		centre + Vector2(-48, 240),
-		"Progress: %d / 3" % hits,
-		HORIZONTAL_ALIGNMENT_LEFT,
-		-1, 20,
-		Color(0.20, 1.0, 0.55, 1.0)
+
+	_draw_text_art(
+		2 + clampi(hits, 0, 3),
+		Rect2(135, 451, 160, 36)
 	)
 
 
@@ -280,3 +271,22 @@ func close() -> void:
 	hits = 0
 	result_time = 0.0
 	hit_flash_left = 0.0
+
+func _draw_text_art(index: int, destination: Rect2) -> void:
+	# Regions match the generated image, including its uneven spacing.
+	var regions: Array[Rect2] = [
+		Rect2(0, 0, 1536, 128),
+		Rect2(0, 128, 1536, 128),
+		Rect2(500, 256, 540, 112),
+		Rect2(500, 368, 540, 116),
+		Rect2(500, 484, 540, 120),
+		Rect2(500, 604, 540, 112),
+		Rect2(0, 716, 1536, 140),
+		Rect2(0, 856, 1536, 168)
+	]
+
+	draw_texture_rect_region(
+		TEXT_ART,
+		destination,
+		regions[index]
+	)

@@ -5,7 +5,10 @@ signal player_died
 signal torch_ready
 signal torch_cooldown_started(cooldown_seconds: float)
 
-const MAX_HEALTH := 3
+@export_enum("Easy", "Medium", "Hard")
+var difficulty: int = 0
+
+var max_health: int = 3
 const WALK_SPEED := 180.0
 const RUN_SPEED := 300.0
 const DAMAGE_ESCAPE_SPEED := 450.0
@@ -15,7 +18,7 @@ const INVINCIBILITY_DURATION := 2.0
 const TORCH_FLASH_DURATION := 0.25
 const TORCH_COOLDOWN_DURATION := 3.0
 
-var health := MAX_HEALTH
+var health: int = 3
 var is_invincible := false
 var invincibility_time_left := 0.0
 var spawn_position := Vector2.ZERO
@@ -37,9 +40,12 @@ var recoil_time_left := 0.0
 @onready var interaction_zone: Area2D = $InteractionZone
 
 
+
 func _ready() -> void:
+	max_health = 3 - clampi(difficulty, 0, 2)
+	health = max_health
 	spawn_position = global_position
-	health_changed.emit(health, MAX_HEALTH)
+	health_changed.emit(health, max_health)
 
 	hurt_box.area_entered.connect(Callable(self, "_on_hurt_box_area_entered"))
 	torch_zone.area_entered.connect(Callable(self, "_on_torch_zone_area_entered"))
@@ -172,7 +178,7 @@ func take_damage(amount: int = 1) -> void:
 		return
 
 	health = maxi(health - amount, 0)
-	health_changed.emit(health, MAX_HEALTH)
+	health_changed.emit(health, max_health)
 
 	if health <= 0:
 		player_died.emit()
@@ -184,13 +190,13 @@ func take_damage(amount: int = 1) -> void:
 
 
 func reset_for_level() -> void:
-	health = MAX_HEALTH
+	health = max_health
 	is_invincible = false
 	invincibility_time_left = 0.0
 	animated_sprite.modulate.a = 1.0
 	global_position = spawn_position
 	velocity = Vector2.ZERO
-	health_changed.emit(health, MAX_HEALTH)
+	health_changed.emit(health, max_health)
 
 
 func _on_hurt_box_area_entered(area: Area2D) -> void:

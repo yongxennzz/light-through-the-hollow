@@ -33,7 +33,18 @@
 [ext_resource type="Texture2D" uid="uid://bx0unv7mi14uj" path="res://assets/third_party/mana_crystal/Mana_Crystal_voyager.png" id="23_0is2v"]
 [ext_resource type="Script" uid="uid://drmnqifns65qc" path="res://scenes/levels/level_2/noise_trap.gd" id="24_rbtc1"]
 [ext_resource type="Texture2D" uid="uid://dtom4m3wikbsm" path="res://assets/third_party/noise_trap/Bear_Trap.png" id="25_6qah1"]
+[ext_resource type="AudioStream" uid="uid://d1ln36lvax7vd" path="res://assets/audio/level_2/sound/golem attack.mp3" id="31_lanud"]
+[ext_resource type="AudioStream" uid="uid://hsjj032f2xxg" path="res://assets/audio/level_2/sound/golem walk n run.mp3" id="33_0fybl"]
+[ext_resource type="AudioStream" uid="uid://cmcg2i45vknyt" path="res://assets/audio/level_2/sound/teleport.mp3" id="33_scp5e"]
 [ext_resource type="Texture2D" uid="uid://bm7gf87dc35gc" path="res://assets/third_party/DarkAgesUi_v1.0/32x32-Tilesheet.png" id="34_n5y6w"]
+[ext_resource type="Script" uid="uid://drpv2fhvuw1xl" path="res://scenes/levels/level_2/guardian_movement_audio.gd" id="34_scp5e"]
+[ext_resource type="PackedScene" uid="uid://bl64ygr8cbqs" path="res://scenes/ui/HealthHUD.tscn" id="35_yibid"]
+[ext_resource type="AudioStream" uid="uid://gm3xxlfrru8b" path="res://assets/audio/level_2/sound/bg music.mp3" id="36_6uc5t"]
+[ext_resource type="AudioStream" uid="uid://fbloh8exiot7" path="res://assets/audio/level_2/sound/water dripping.mp3" id="37_gr62i"]
+[ext_resource type="AudioStream" uid="uid://clmmvtaevw26b" path="res://assets/audio/level_2/sound/player hurt.mp3" id="42_8xd22"]
+[ext_resource type="AudioStream" uid="uid://bxbvas5roi8ed" path="res://assets/audio/level_2/sound/portal.mp3" id="43_xfvaj"]
+[ext_resource type="Script" uid="uid://db8k1vxt8htii" path="res://scenes/levels/level_2/level_intro.gd" id="44_xfvaj"]
+[ext_resource type="Texture2D" uid="uid://bl1f80oq8ajs0" path="res://assets/images/ui/Untitled design.png" id="45_spu2k"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lp8so"]
 texture = ExtResource("1_v0jb6")
@@ -241,7 +252,10 @@ size = Vector2(126, 60)
 size = Vector2(318, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rbtc1"]
-size = Vector2(128, 27)
+size = Vector2(188, 27)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_spu2k"]
+size = Vector2(27, 127.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_issku"]
 size = Vector2(185, 217)
@@ -1004,6 +1018,10 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w3qjl"]
 size = Vector2(32, 10)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_vn1k2"]
+atlas = ExtResource("45_spu2k")
+region = Rect2(470, 300, 980, 470)
+
 [node name="Level2" type="Node2D" unique_id=167200828]
 script = ExtResource("1_e74df")
 
@@ -1145,13 +1163,27 @@ tile_set = SubResource("TileSet_slc34")
 position = Vector2(483, 291)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/StaticPlatforms/MiddleMachinePlatform" unique_id=1271920005]
-position = Vector2(64, 13.5)
+position = Vector2(34, 13.5)
 shape = SubResource("RectangleShape2D_rbtc1")
 
 [node name="Visual" type="TileMapLayer" parent="World/StaticPlatforms/MiddleMachinePlatform" unique_id=227520488]
 texture_filter = 1
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAAAAAAAAwAAAAAAAAABAAAAAwAAAAAAAAACAAAAAwAAAAAAAAADAAAAAwAAAAAAAAA=")
+tile_set = SubResource("TileSet_slc34")
+
+[node name="MiddleMachinePlatform2" type="StaticBody2D" parent="World/StaticPlatforms" unique_id=1918865267]
+position = Vector2(395, 339)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/StaticPlatforms/MiddleMachinePlatform2" unique_id=1149231697]
+position = Vector2(41.5, -86.25)
+shape = SubResource("RectangleShape2D_spu2k")
+
+[node name="Visual" type="TileMapLayer" parent="World/StaticPlatforms/MiddleMachinePlatform2" unique_id=583558536]
+texture_filter = 1
+position = Vector2(24, -51)
+scale = Vector2(2, 2)
+tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAFAAAP//AAAAAAAAAGAAAP7/AAAAAAAAAGAAAP3/AAAAAAAAAGABAAAAAAAAAAAAADA=")
 tile_set = SubResource("TileSet_slc34")
 
 [node name="CentralMass" type="StaticBody2D" parent="World/StaticPlatforms" unique_id=1098706322]
@@ -1488,6 +1520,22 @@ position = Vector2(0, -36)
 sprite_frames = SubResource("SpriteFrames_m1de3")
 animation = &"appear"
 
+[node name="AttackSound" type="AudioStreamPlayer2D" parent="Gameplay/MineGuardian" unique_id=1778667242]
+stream = ExtResource("31_lanud")
+volume_db = -3.0
+max_distance = 1600.0
+
+[node name="TeleportSound" type="AudioStreamPlayer2D" parent="Gameplay/MineGuardian" unique_id=1093362353]
+stream = ExtResource("33_scp5e")
+volume_db = -10.0
+max_distance = 1600.0
+
+[node name="MovementSound" type="AudioStreamPlayer2D" parent="Gameplay/MineGuardian" unique_id=659038201]
+stream = ExtResource("33_0fybl")
+volume_db = -12.0
+max_distance = 1600.0
+script = ExtResource("34_scp5e")
+
 [node name="NoiseTraps" type="Node2D" parent="Gameplay" unique_id=545926048]
 
 [node name="NoiseTrap1" type="Area2D" parent="Gameplay/NoiseTraps" unique_id=1603819647]
@@ -1619,6 +1667,22 @@ hframes = 4
 position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_w3qjl")
 
+[node name="TrapLeftPlatform2" type="Area2D" parent="Gameplay/NoiseTraps" unique_id=1200036219]
+position = Vector2(225, 407)
+collision_layer = 0
+script = ExtResource("24_rbtc1")
+route_number = 2
+
+[node name="TrapVisual" type="Sprite2D" parent="Gameplay/NoiseTraps/TrapLeftPlatform2" unique_id=32840320]
+position = Vector2(-1, -9)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("25_6qah1")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/NoiseTraps/TrapLeftPlatform2" unique_id=1238739950]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_w3qjl")
+
 [node name="TrapUpperPlatform" type="Area2D" parent="Gameplay/NoiseTraps" unique_id=481541041]
 position = Vector2(357, 126)
 collision_layer = 0
@@ -1632,6 +1696,54 @@ texture = ExtResource("25_6qah1")
 hframes = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform" unique_id=1579202289]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_w3qjl")
+
+[node name="TrapUpperPlatform2" type="Area2D" parent="Gameplay/NoiseTraps" unique_id=1874468079]
+position = Vector2(393, 126)
+collision_layer = 0
+script = ExtResource("24_rbtc1")
+route_number = 3
+
+[node name="TrapVisual" type="Sprite2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform2" unique_id=1995862313]
+position = Vector2(0, -11)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("25_6qah1")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform2" unique_id=685378094]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_w3qjl")
+
+[node name="TrapUpperPlatform3" type="Area2D" parent="Gameplay/NoiseTraps" unique_id=173542800]
+position = Vector2(800, 187)
+collision_layer = 0
+script = ExtResource("24_rbtc1")
+route_number = 3
+
+[node name="TrapVisual" type="Sprite2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform3" unique_id=1762956349]
+position = Vector2(0, -11)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("25_6qah1")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform3" unique_id=1809211891]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_w3qjl")
+
+[node name="TrapUpperPlatform4" type="Area2D" parent="Gameplay/NoiseTraps" unique_id=1822897699]
+position = Vector2(907, 186)
+collision_layer = 0
+script = ExtResource("24_rbtc1")
+route_number = 3
+
+[node name="TrapVisual" type="Sprite2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform4" unique_id=299329647]
+position = Vector2(0, -11)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("25_6qah1")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/NoiseTraps/TrapUpperPlatform4" unique_id=30154983]
 position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_w3qjl")
 
@@ -1680,6 +1792,9 @@ hframes = 4
 position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_w3qjl")
 
+[node name="HealthHud" parent="." unique_id=1554648370 node_paths=PackedStringArray("player") instance=ExtResource("35_yibid")]
+player = NodePath("../Gameplay/Player")
+
 [node name="GeneratorMinigameUI" type="CanvasLayer" parent="." unique_id=784480276]
 
 [node name="CalibrationGame" type="Control" parent="GeneratorMinigameUI" unique_id=1329781363]
@@ -1713,5 +1828,90 @@ patch_margin_bottom = 24
 
 [node name="RoomCamera" type="Camera2D" parent="." unique_id=360325201]
 position = Vector2(640, 360)
+
+[node name="LevelAudio" type="Node" parent="." unique_id=472321707]
+
+[node name="CaveMusic" type="AudioStreamPlayer" parent="LevelAudio" unique_id=715521659]
+stream = ExtResource("36_6uc5t")
+volume_db = -18.0
+autoplay = true
+
+[node name="CaveAmbience" type="AudioStreamPlayer" parent="LevelAudio" unique_id=184585728]
+stream = ExtResource("37_gr62i")
+volume_db = -26.0
+autoplay = true
+
+[node name="PlayerHurtSound" type="AudioStreamPlayer" parent="LevelAudio" unique_id=576446067]
+stream = ExtResource("42_8xd22")
+volume_db = -8.0
+
+[node name="EntrancePortalSound" type="AudioStreamPlayer" parent="LevelAudio" unique_id=537159482]
+stream = ExtResource("43_xfvaj")
+volume_db = -14.0
+
+[node name="ExitPortalSound" type="AudioStreamPlayer" parent="LevelAudio" unique_id=1507166645]
+stream = ExtResource("43_xfvaj")
+volume_db = -14.0
+
+[node name="LevelIntro" type="CanvasLayer" parent="." unique_id=939987972]
+layer = 10
+script = ExtResource("44_xfvaj")
+
+[node name="Screen" type="Control" parent="LevelIntro" unique_id=1061895002]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="IntroPanel" type="NinePatchRect" parent="LevelIntro/Screen" unique_id=39436789]
+texture_filter = 1
+layout_mode = 1
+offset_left = 340.0
+offset_top = 210.0
+offset_right = 940.0
+offset_bottom = 510.0
+texture = ExtResource("34_n5y6w")
+region_rect = Rect2(0, 0, 96, 96)
+patch_margin_left = 24
+patch_margin_top = 24
+patch_margin_right = 24
+patch_margin_bottom = 24
+
+[node name="Title" type="Label" parent="LevelIntro/Screen/IntroPanel" unique_id=347541030]
+visible = false
+layout_mode = 0
+offset_left = 40.0
+offset_top = 30.0
+offset_right = 560.0
+offset_bottom = 74.0
+
+[node name="Message" type="Label" parent="LevelIntro/Screen/IntroPanel" unique_id=588680839]
+visible = false
+layout_mode = 0
+offset_left = 48.0
+offset_top = 90.0
+offset_right = 552.0
+offset_bottom = 210.0
+
+[node name="ContinueButton" type="Button" parent="LevelIntro/Screen/IntroPanel" unique_id=1053929097]
+layout_mode = 0
+offset_left = 190.0
+offset_top = 230.0
+offset_right = 410.0
+offset_bottom = 274.0
+text = "Enter the Cave"
+
+[node name="IntroTextArtwork" type="TextureRect" parent="LevelIntro/Screen/IntroPanel" unique_id=1774801612]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 20.0
+offset_right = 560.0
+offset_bottom = 220.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_vn1k2")
+expand_mode = 1
+stretch_mode = 5
 
 [editable path="Gameplay/Player"]

@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://bl64ygr8cbqs"]
+
+[ext_resource type="Script" uid="uid://vwaow5jj23r1" path="res://scenes/ui/health_hud.gd" id="1_kxqeh"]
+[ext_resource type="Texture2D" uid="uid://7krqbsjv0qt5" path="res://assets/third_party/healthbar/assets (Free)/Horror Healthbar.png" id="2_llj5b"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jiyb8"]
+atlas = ExtResource("2_llj5b")
+region = Rect2(0, 0, 128, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lkb6k"]
+atlas = ExtResource("2_llj5b")
+region = Rect2(32, 48, 84, 12)
+
+[node name="HealthHud" type="CanvasLayer" unique_id=1554648370]
+script = ExtResource("1_kxqeh")
+
+[node name="HealthBar" type="TextureProgressBar" parent="." unique_id=1677179330]
+texture_filter = 1
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 152.0
+offset_bottom = 60.0
+scale = Vector2(2, 2)
+mouse_filter = 2
+max_value = 3.0
+texture_over = SubResource("AtlasTexture_jiyb8")
+texture_progress = SubResource("AtlasTexture_lkb6k")
+texture_progress_offset = Vector2(32, 16)
