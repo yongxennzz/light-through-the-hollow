@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://px3p0qqd7eu"]
+
+[ext_resource type="Script" uid="uid://vwaow5jj23r1" path="res://scenes/ui/health_hud.gd" id="1_8unrf"]
+
+[node name="HealthHud" type="Node2D" unique_id=342578665]
+script = ExtResource("1_8unrf")
+
+[node name="Hearts" type="RichTextLabel" parent="." unique_id=782481855]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 264.0
+offset_bottom = 76.0
+mouse_filter = 2
+bbcode_enabled = true
