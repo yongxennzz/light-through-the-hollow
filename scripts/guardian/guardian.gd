@@ -94,9 +94,8 @@ func _do_patrol(_delta: float) -> void:
 
 	var target_pos: Vector2 = patrol_points[patrol_index].global_position
 	var to_target := target_pos - global_position
-
+	
 	if to_target.length() <= arrive_threshold:
-		# 从 RETURNTOPATROL 回到最近点后,切回正常巡逻
 		if state == State.RETURNTOPATROL:
 			state = State.PATROL
 
@@ -270,7 +269,7 @@ func reset_to_zone(new_position: Vector2, new_route: Array[Node2D]) -> void:
 
 
 # ---------- TORCH / STUN ----------
-@export var illuminate_freeze_duration: float = 2.0  # 停顿多久,自己调
+@export var illuminate_freeze_duration: float = 2.0  # idle for how long
 var illuminate_freeze_timer: float = 0.0
 
 func _is_illuminated() -> bool:

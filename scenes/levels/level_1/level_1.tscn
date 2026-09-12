@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://ct14buh5cgtqu" path="res://assets/images/pause.png" id="13_1jeig"]
 [ext_resource type="Script" uid="uid://bj1vx7yjrrms0" path="res://scenes/levels/level_1/pause_canvas_layer.gd" id="13_wfdrs"]
 [ext_resource type="Texture2D" uid="uid://bdc38783jixlc" path="res://assets/images/woodlog2.png" id="14_hhmec"]
+[ext_resource type="PackedScene" uid="uid://cqcfbb8y3unow" path="res://scenes/guardian/guardian.tscn" id="16_ldw0e"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5o1mp"]
 texture = ExtResource("2_5o1mp")
@@ -1007,8 +1008,12 @@ texture = ExtResource("14_hhmec")
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_41r28"]
 texture = ExtResource("14_hhmec")
 
-[node name="Level1" type="Node2D" unique_id=186242714]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rmnd1"]
+size = Vector2(34, 112)
+
+[node name="Level1" type="Node2D" unique_id=186242714 node_paths=PackedStringArray("route")]
 script = ExtResource("1_3lh42")
+route = [NodePath("ZonePoint/Point1"), NodePath("ZonePoint/Point2"), NodePath("ZonePoint/Point3"), NodePath("ZonePoint/Point4"), NodePath("ZonePoint/Point5"), NodePath("ZonePoint/Point6"), NodePath("ZonePoint/Point7"), NodePath("ZonePoint/Point8"), NodePath("ZonePoint/Point9"), NodePath("ZonePoint/Point10")]
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1640801814]
 position = Vector2(1369, 175)
@@ -1329,7 +1334,59 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_5d3u7")
 theme_override_styles/hover = SubResource("StyleBoxTexture_41r28")
 text = "Exit Game"
 
+[node name="Zone" type="Area2D" parent="." unique_id=472532726]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Zone" unique_id=809767332]
+position = Vector2(1298, 570)
+shape = SubResource("RectangleShape2D_rmnd1")
+
+[node name="GuardianPost" type="Marker2D" parent="." unique_id=1987580153]
+position = Vector2(2757, 569)
+
+[node name="ZonePoint" type="Node2D" parent="." unique_id=1978665559]
+
+[node name="Point1" type="Marker2D" parent="ZonePoint" unique_id=101512316]
+position = Vector2(2757, 114)
+
+[node name="Point2" type="Marker2D" parent="ZonePoint" unique_id=297189359]
+position = Vector2(2453, 114)
+
+[node name="Point3" type="Marker2D" parent="ZonePoint" unique_id=406822710]
+position = Vector2(2031, 114)
+
+[node name="Point4" type="Marker2D" parent="ZonePoint" unique_id=596310765]
+position = Vector2(1709, 114)
+
+[node name="Point5" type="Marker2D" parent="ZonePoint" unique_id=96765164]
+position = Vector2(1365, 114)
+
+[node name="Point6" type="Marker2D" parent="ZonePoint" unique_id=1672950883]
+position = Vector2(1365, 409)
+
+[node name="Point7" type="Marker2D" parent="ZonePoint" unique_id=113267345]
+position = Vector2(1709, 409)
+
+[node name="Point8" type="Marker2D" parent="ZonePoint" unique_id=895627902]
+position = Vector2(2031, 409)
+
+[node name="Point9" type="Marker2D" parent="ZonePoint" unique_id=1566023904]
+position = Vector2(2453, 409)
+
+[node name="Point10" type="Marker2D" parent="ZonePoint" unique_id=136876514]
+position = Vector2(2757, 409)
+
+[node name="Guardian" parent="." unique_id=1362690702 node_paths=PackedStringArray("patrol_points") instance=ExtResource("16_ldw0e")]
+scale = Vector2(0.7, 0.7)
+collision_layer = 16
+collision_mask = 0
+patrol_points = [NodePath("../ZonePoint/Point1"), NodePath("../ZonePoint/Point2"), NodePath("../ZonePoint/Point3"), NodePath("../ZonePoint/Point4"), NodePath("../ZonePoint/Point5"), NodePath("../ZonePoint/Point6"), NodePath("../ZonePoint/Point7"), NodePath("../ZonePoint/Point8"), NodePath("../ZonePoint/Point9"), NodePath("../ZonePoint/Point10")]
+patrol_speed = 40.0
+chase_speed = 80.0
+attack_range = 100.0
+vision_length = 200.0
+
 [connection signal="body_entered" from="Ladder/ClimbArea" to="Player" method="_on_climb_area_body_entered"]
 [connection signal="body_exited" from="Ladder/ClimbArea" to="Player" method="_on_climb_area_body_exited"]
+[connection signal="body_entered" from="Zone" to="." method="_on_zone_body_entered"]
 
 [editable path="Player"]

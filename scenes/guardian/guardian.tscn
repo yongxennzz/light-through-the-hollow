@@ -446,7 +446,7 @@ animations = [{
 size = Vector2(54, 38)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kdndp"]
-radius = 586.885
+radius = 133.00375
 
 [node name="Guardian" type="CharacterBody2D" unique_id=1362690702]
 script = ExtResource("1_wcu5v")
@@ -458,7 +458,7 @@ shape = SubResource("RectangleShape2D_cpsn1")
 texture_filter = 1
 scale = Vector2(4.6369576, 5.098957)
 sprite_frames = SubResource("SpriteFrames_fmkjd")
-animation = &"ReturnToPatrol"
+animation = &"ChaseIdle"
 
 [node name="StunTimer" type="Timer" parent="." unique_id=1060794129]
 
@@ -477,8 +477,6 @@ shape = SubResource("RectangleShape2D_d048r")
 [node name="VisionRayCast" type="RayCast2D" parent="FacingRoot" unique_id=279853224]
 position = Vector2(18, -31)
 target_position = Vector2(300, -2)
-
-[node name="ObstacleCheck" type="RayCast2D" parent="FacingRoot" unique_id=1023244354]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot" unique_id=1363622710]
 shape = SubResource("CircleShape2D_kdndp")

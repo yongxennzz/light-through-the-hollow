@@ -13,7 +13,6 @@ func _ready():
  
 func _on_zon_a_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		print("route_a size: ", route_a.size())
 		$Guardian.reset_to_zone($GuardianPostA.global_position, route_a)
 		$Guardian.visible = true
  
