@@ -1,10 +1,9 @@
 extends CharacterBody2D
 
-# ---------- 状态机 ----------
 enum State { IDLE, PATROL, DISCOVER, CHASE, ATTACK, RETURNTOPATROL }
 var state: State = State.PATROL
 
-# ---------- Patrol 设置 ----------
+# Patrol setting
 @export var patrol_points: Array[Node2D] = []
 @export var patrol_speed: float = 80.0
 @export var chase_speed: float = 140.0
@@ -16,7 +15,7 @@ var patrol_waiting: bool = false
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-# ---------- 追击 / 攻击 ----------
+# chase/ attack
 var target: Node2D = null
 @export var attack_range: float = 40.0
 @export var attack_cooldown: float = 1.0
@@ -25,7 +24,7 @@ var attack_timer: float = 0.0
 @export var discover_duration: float = 0.6
 var discover_timer: float = 0.0
 
-# ---------- 悬停晃动 ----------
+# tsop
 @export var hover_amplitude: float = 4.0
 @export var hover_speed: float = 2.0
 var hover_time: float = 0.0
@@ -47,6 +46,16 @@ func alert_to_noise() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_is_illuminated()
+	if illuminate_freeze_timer > 0.0:
+		illuminate_freeze_timer -= delta
+		velocity = Vector2.ZERO
+		_play_anim("ChaseIdle")
+		move_and_slide()
+		if illuminate_freeze_timer <= 0.0:
+			_lose_target()
+		return
+
 	hover_time += delta
 	_check_vision()
 	_check_noise()
@@ -108,6 +117,8 @@ func _do_patrol(_delta: float) -> void:
 
 # ---------- CHASE ----------
 @export var give_up_distance: float = 2000.0
+@export var lose_sight_grace: float = 1.0  # How long can the guardian continue based on memory after losing sight of the player
+var lose_sight_timer: float = 0.0
 
 func _do_chase(_delta: float) -> void:
 	if target == null:
@@ -125,9 +136,26 @@ func _do_chase(_delta: float) -> void:
 		velocity = Vector2.ZERO
 		return
 
+	if _has_line_of_sight(target):
+		lose_sight_timer = 0.0
+	else:
+		lose_sight_timer += _delta
+		if lose_sight_timer >= lose_sight_grace:
+			_lose_target()
+			return
+
 	velocity = to_target.normalized() * chase_speed
 	_face_direction(velocity.x)
 
+
+func _has_line_of_sight(body: Node2D) -> bool:
+	var space_state := get_world_2d().direct_space_state
+	var query := PhysicsRayQueryParameters2D.create(global_position, body.global_position)
+	query.exclude = [self]
+	var result := space_state.intersect_ray(query)
+	if result.is_empty():
+		return true
+	return result.collider == body
 
 # ---------- ATTACK ----------
 func _do_attack(delta: float) -> void:
@@ -153,7 +181,7 @@ func _perform_attack() -> void:
 		target.take_damage(1)
 
 
-# ---------- 跟丢玩家:找最近的巡逻点,回去继续巡逻 ----------
+# lose and find nearest patrol point
 func _lose_target() -> void:
 	target = null
 	if patrol_points.is_empty():
@@ -198,7 +226,7 @@ func _check_vision() -> void:
 			state = State.DISCOVER
 
 
-# ---------- 视野侦测----------
+# -vision detect
 func _on_vision_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		target = body
@@ -210,7 +238,7 @@ func _on_vision_area_body_exited(body: Node2D) -> void:
 		_lose_target()
 
 
-# ---------- 共用: 面向移动方向 ----------
+# direction/facing
 @onready var facing_root: Node2D = $FacingRoot
 
 func _play_anim(anim_name: String) -> void:
@@ -223,25 +251,7 @@ func _face_direction(vx: float) -> void:
 		sprite.flip_h = facing_left
 		facing_root.scale.x = -1.0 if facing_left else 1.0
 
-
-# ---------- 避障(可选) ----------
-@onready var obstacle_check: RayCast2D = $FacingRoot/ObstacleCheck
-
-func _avoid_obstacle(desired_velocity: Vector2) -> Vector2:
-	if desired_velocity.length() < 0.01:
-		return desired_velocity
-
-	obstacle_check.target_position = desired_velocity.normalized() * 24
-	obstacle_check.force_raycast_update()
-
-	if obstacle_check.is_colliding():
-		var normal := obstacle_check.get_collision_normal()
-		return desired_velocity.slide(normal)
-
-	return desired_velocity
-
-
-# ---------- 切换区域 ----------
+# change zon area
 func reset_to_zone(new_position: Vector2, new_route: Array[Node2D]) -> void:
 	visible = true
 	velocity = Vector2.ZERO
@@ -257,3 +267,30 @@ func reset_to_zone(new_position: Vector2, new_route: Array[Node2D]) -> void:
 	else:
 		state = State.IDLE
 		sprite.play("PatrolIdle")
+
+
+# ---------- TORCH / STUN ----------
+@export var illuminate_freeze_duration: float = 2.0  # 停顿多久,自己调
+var illuminate_freeze_timer: float = 0.0
+
+func _is_illuminated() -> bool:
+	if player_ref == null:
+		return false
+	if not player_ref.torch_active:
+		return false
+
+	var to_guardian: Vector2 = global_position - player_ref.global_position
+	var torch_range: float = 150.0
+	var torch_angle_deg: float = 45.0
+
+	if to_guardian.length() > torch_range:
+		return false
+
+	var facing_dir: Vector2 = Vector2.RIGHT if player_ref.facing_right else Vector2.LEFT
+	var angle_to_guardian: float = rad_to_deg(facing_dir.angle_to(to_guardian))
+
+	if abs(angle_to_guardian) <= torch_angle_deg:
+		illuminate_freeze_timer = illuminate_freeze_duration
+		return true
+
+	return false

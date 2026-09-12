@@ -1,9 +1,9 @@
 extends Node2D
 class_name HintLight
 
-@export var blink_count: int = 1        # 每次循环闪几下
-@export var blink_interval: float = 1.0 # 每次闪烁之间的间隔
-@export var pause_between_loops: float = 3.0  # 一轮闪完后,停顿多久再开始下一轮
+@export var blink_count: int = 1        #blink how many times
+@export var blink_interval: float = 1.0 
+@export var pause_between_loops: float = 3.0  # stop after blink
 @export var on_sprite: Sprite2D
 @export var off_sprite: Sprite2D
 

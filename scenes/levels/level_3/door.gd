@@ -41,4 +41,4 @@ func _on_exit_zone_entered(body: Node2D) -> void:
 		_go_to_main_menu()
 
 func _go_to_main_menu() -> void:
-	get_tree().change_scene_to_file("res://scenes/ui/level_select.tscn") 
+	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn") 

@@ -205,17 +205,13 @@ func _on_interaction_zone_area_exited(area: Area2D) -> void:
 
 
 func _on_climb_area_body_entered(body: Node2D) -> void:
-	print("CLIMB ENTERED: ", body.name)
 	if body == self:
 		is_on_ladder = true
-		print("is_on_ladder = TRUE")
 
 
 func _on_climb_area_body_exited(body: Node2D) -> void:
-	print("CLIMB EXITED: ", body.name)
 	if body == self:
 		is_on_ladder = false
-		print("is_on_ladder = FALSE")
 
 
 func _on_crystal_body_entered(body: Node2D) -> void:

@@ -243,41 +243,17 @@ size = Vector2(11.879211, 30.939087)
 [sub_resource type="GDScript" id="GDScript_ah86r"]
 script/source = "extends CanvasLayer
 
-@onready var hearts: Array[TextureRect] = [$Heart1, $Heart2, $Heart3]
-@onready var key_icon: TextureRect = $KeyIcon
-@onready var herb_icon: TextureRect = $HerbIcon
+@onready var health_label: Label = $HealthLabel
 
 func _ready() -> void:
-	key_icon.visible = false
-	herb_icon.visible = false
-
 	var player = get_tree().get_first_node_in_group(\"player\")
 	if player:
 		player.health_changed.connect(_on_health_changed)
 		_on_health_changed(player.health, player.MAX_HEALTH)
 
-	var key_node = get_tree().get_first_node_in_group(\"key\")
-	if key_node:
-		key_node.picked_up.connect(_on_key_picked_up)
-
-	var herb_node = get_tree().get_first_node_in_group(\"herb\")
-	if herb_node:
-		herb_node.picked_up.connect(_on_herb_picked_up)
-
 func _on_health_changed(current_health: int, max_health: int) -> void:
-	for i in hearts.size():
-		hearts[i].visible = i < current_health
-
-func _on_key_picked_up() -> void:
-	key_icon.visible = true
-
-func _on_herb_picked_up() -> void:
-	herb_icon.visible = true
+	health_label.text = \"x\" + str(current_health)
 "
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jdpty"]
-atlas = ExtResource("1_kvnv3")
-region = Rect2(176.83006, 151.93593, 13.142944, 4.2086945)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kcxm2"]
 size = Vector2(100, 144)
@@ -939,41 +915,19 @@ scale = Vector2(0.7, 0.7)
 [node name="TopLabel" type="CanvasLayer" parent="." unique_id=1099759738]
 script = SubResource("GDScript_ah86r")
 
-[node name="Heart1" type="TextureRect" parent="TopLabel" unique_id=2064417146]
+[node name="TextureRect" type="TextureRect" parent="TopLabel" unique_id=2064417146]
 custom_minimum_size = Vector2(20, 20)
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("5_11hiw")
 expand_mode = 1
 
-[node name="Heart2" type="TextureRect" parent="TopLabel" unique_id=868547249]
-custom_minimum_size = Vector2(20, 20)
-offset_left = 42.0
-offset_right = 82.0
-offset_bottom = 40.0
-texture = ExtResource("5_11hiw")
-expand_mode = 1
-
-[node name="Heart3" type="TextureRect" parent="TopLabel" unique_id=1672719286]
-custom_minimum_size = Vector2(20, 20)
-offset_left = 84.0
-offset_right = 124.0
-offset_bottom = 40.0
-texture = ExtResource("5_11hiw")
-expand_mode = 1
-
-[node name="HerbIcon" type="TextureRect" parent="TopLabel" unique_id=1796506011]
-offset_left = 134.0
-offset_right = 174.0
-offset_bottom = 40.0
-texture = ExtResource("21_0wb05")
-
-[node name="KeyIcon" type="TextureRect" parent="TopLabel" unique_id=288298707]
-offset_left = 184.0
-offset_top = 11.0
-offset_right = 229.0
-offset_bottom = 34.0
-texture = SubResource("AtlasTexture_jdpty")
+[node name="HealthLabel" type="Label" parent="TopLabel" unique_id=350159513]
+offset_left = 56.0
+offset_top = 5.0
+offset_right = 125.0
+offset_bottom = 38.0
+text = "x3"
 
 [node name="Guardian" parent="." unique_id=1362690702 node_paths=PackedStringArray("patrol_points") instance=ExtResource("34_jdpty")]
 scale = Vector2(0.7, 0.7)

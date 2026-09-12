@@ -11,16 +11,16 @@ func _ready() -> void:
 	interact_area.body_entered.connect(_on_body_entered)
 	interact_area.body_exited.connect(_on_body_exited)
 	machine_ui.visible = false
-	# Keep UI responsive even if the game gets paused later
+	
 	machine_ui.process_mode = Node.PROCESS_MODE_ALWAYS
 	machine_ui.connect("machine_solved", Callable(self, "_on_machine_solved"))
 	herb.visible = false
+	herb.monitoring = false
 
 
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
 		player_in_range = true
-		# Could show an "Press E to interact" prompt here
 
 
 func _on_body_exited(body: Node) -> void:
@@ -45,7 +45,6 @@ func _open_ui() -> void:
 
 func _close_ui() -> void:
 	machine_ui.visible = false
-	# get_tree().paused = false  # uncomment if pausing is added later
 
 
 func _on_machine_solved() -> void:
@@ -67,4 +66,4 @@ func _on_machine_solved() -> void:
 
 func _on_herb_drop_finished() -> void:
 	if is_instance_valid(herb):
-		herb.call("activate")
+		herb.monitoring = true
