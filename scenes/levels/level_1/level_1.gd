@@ -3,6 +3,11 @@ extends Node2D
 @onready var win_panel = $WinCanvasLayer/Panel
 @onready var congratulations_sound = $CongratulationsSound
 
+func _ready() -> void:
+	if not StoryState.intro_seen:
+		var intro = preload("res://scenes/story/intro_dialogue.tscn").instantiate()
+		add_child(intro)
+
 func level_complete():
 	win_panel.visible = true
 	win_panel.scale = Vector2(0, 0)
