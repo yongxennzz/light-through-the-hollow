@@ -1,38 +1,38 @@
 [gd_scene format=4 uid="uid://cqsjqgw4xrbvv"]
 
-[ext_resource type="AudioStream" uid="uid://bcv3ylll5qx4y" path="res://assets/audio/dungeonBackground.mp3" id="1_1ph5b"]
-[ext_resource type="Script" uid="uid://cpxx3m5gtjhad" path="res://scenes/levels/level_3/level_3.gd" id="1_51glb"]
-[ext_resource type="Texture2D" uid="uid://cdv56r7u42eyk" path="res://assets/images/Dungeon Tile Set.png" id="1_kvnv3"]
+[ext_resource type="AudioStream" uid="uid://bcv3ylll5qx4y" path="res://assets/audio/level_3/dungeonBackground.mp3" id="1_1ph5b"]
+[ext_resource type="Script" uid="uid://cpxx3m5gtjhad" path="res://scripts/level/level_3/level_3.gd" id="1_51glb"]
+[ext_resource type="Texture2D" uid="uid://cdv56r7u42eyk" path="res://assets/images/level_3/Dungeon Tile Set.png" id="1_kvnv3"]
 [ext_resource type="PackedScene" uid="uid://00atclpf5h7f" path="res://scenes/player/player.tscn" id="4_11hiw"]
 [ext_resource type="Texture2D" uid="uid://cp6cw1ikfi5rp" path="res://assets/images/hearticon.png" id="5_11hiw"]
-[ext_resource type="Script" uid="uid://cnb0cbjulxaly" path="res://scenes/levels/level_3/canvas_layer.gd" id="6_3ja61"]
-[ext_resource type="Script" uid="uid://bdac6ja0cdou" path="res://scenes/levels/level_3/trap_move.gd" id="7_qi3d5"]
-[ext_resource type="Script" uid="uid://dn8ojx2j20s8r" path="res://scenes/levels/level_3/puzzle_machine_1.gd" id="8_drns5"]
-[ext_resource type="Texture2D" uid="uid://b3364mwcgjyoj" path="res://assets/images/machine_sprite.png" id="8_rr702"]
-[ext_resource type="Texture2D" uid="uid://b6y1p1uewr7uq" path="res://assets/images/Button-red_up.png" id="9_bm2i8"]
-[ext_resource type="Texture2D" uid="uid://cpgjfh6xw6cu" path="res://assets/images/Button-red_down.png" id="10_m7db3"]
-[ext_resource type="Texture2D" uid="uid://bek3d3e46lltj" path="res://assets/images/pointer_only.png" id="12_g0m7m"]
-[ext_resource type="Texture2D" uid="uid://bp6m0w5ieqhoh" path="res://assets/images/Button-blue_up.png" id="12_nd7a6"]
-[ext_resource type="Texture2D" uid="uid://bqavnxvrj7b72" path="res://assets/images/Button-blue_down.png" id="13_g0m7m"]
-[ext_resource type="Texture2D" uid="uid://bsespebehbiw2" path="res://assets/images/dial_circle.png" id="13_lhkh2"]
-[ext_resource type="Texture2D" uid="uid://dlycwat7kwppa" path="res://assets/images/Light-off.png" id="14_g0m7m"]
-[ext_resource type="Texture2D" uid="uid://dhh3uux403ae0" path="res://assets/images/Button-yellow_up.png" id="14_lhkh2"]
-[ext_resource type="Texture2D" uid="uid://c66pbdmnvvuny" path="res://assets/images/Button-yellow_down.png" id="15_mgnkr"]
-[ext_resource type="Script" uid="uid://1o7ny3dokqqh" path="res://scenes/levels/level_3/dial.gd" id="15_okpty"]
-[ext_resource type="Texture2D" uid="uid://h1svuwltflfb" path="res://assets/images/Button-submit_up.png" id="19_3ja61"]
-[ext_resource type="Texture2D" uid="uid://1ohru1gxh0tu" path="res://assets/images/Light-green.png" id="19_tje2u"]
-[ext_resource type="Texture2D" uid="uid://cix7e58b02h7x" path="res://assets/images/Button-submit_down.png" id="20_0wb05"]
-[ext_resource type="Texture2D" uid="uid://b0ns0qxfy6kfm" path="res://assets/images/Light-red.png" id="20_joxwt"]
-[ext_resource type="Texture2D" uid="uid://cbc44verev3w1" path="res://assets/images/mint_pot 16.png" id="21_0wb05"]
-[ext_resource type="Script" uid="uid://deyjvkdx5cg1m" path="res://scenes/levels/level_3/herb.gd" id="21_88rp4"]
-[ext_resource type="Script" uid="uid://fyxjit7mbpmo" path="res://scenes/levels/level_3/HintLight.gd" id="23_joxwt"]
-[ext_resource type="Texture2D" uid="uid://bc0npr7avd0sl" path="res://assets/images/blue.png" id="23_tje2u"]
-[ext_resource type="Texture2D" uid="uid://bshnwcvpda7nv" path="res://assets/images/yellow.png" id="24_joxwt"]
-[ext_resource type="Script" uid="uid://blj81v263y8py" path="res://scenes/levels/level_3/DigitSlot.gd" id="26_dv2ml"]
-[ext_resource type="Script" uid="uid://ck7jxab624gxs" path="res://scenes/levels/level_3/puzzle_machine_2.gd" id="26_m6xal"]
-[ext_resource type="AudioStream" uid="uid://6rpytl6m2xin" path="res://assets/audio/pickup_sound.mp3" id="28_51glb"]
-[ext_resource type="Script" uid="uid://sb2fmbox1kyd" path="res://scenes/levels/level_3/key.gd" id="28_bnlkb"]
-[ext_resource type="Script" uid="uid://jb34nykojldk" path="res://scenes/levels/level_3/door.gd" id="29_1ph5b"]
+[ext_resource type="Script" uid="uid://cnb0cbjulxaly" path="res://scripts/level/level_3/canvas_layer.gd" id="6_3ja61"]
+[ext_resource type="Script" uid="uid://bdac6ja0cdou" path="res://scripts/level/level_3/trap_move.gd" id="7_qi3d5"]
+[ext_resource type="Script" uid="uid://dn8ojx2j20s8r" path="res://scripts/level/level_3/puzzle_machine_1.gd" id="8_drns5"]
+[ext_resource type="Texture2D" uid="uid://b3364mwcgjyoj" path="res://assets/images/level_3/machine_sprite.png" id="8_rr702"]
+[ext_resource type="Texture2D" uid="uid://b6y1p1uewr7uq" path="res://assets/images/level_3/Button-red_up.png" id="9_bm2i8"]
+[ext_resource type="Texture2D" uid="uid://cpgjfh6xw6cu" path="res://assets/images/level_3/Button-red_down.png" id="10_m7db3"]
+[ext_resource type="Texture2D" uid="uid://bek3d3e46lltj" path="res://assets/images/level_3/pointer_only.png" id="12_g0m7m"]
+[ext_resource type="Texture2D" uid="uid://bp6m0w5ieqhoh" path="res://assets/images/level_3/Button-blue_up.png" id="12_nd7a6"]
+[ext_resource type="Texture2D" uid="uid://bqavnxvrj7b72" path="res://assets/images/level_3/Button-blue_down.png" id="13_g0m7m"]
+[ext_resource type="Texture2D" uid="uid://bsespebehbiw2" path="res://assets/images/level_3/dial_circle.png" id="13_lhkh2"]
+[ext_resource type="Texture2D" uid="uid://dlycwat7kwppa" path="res://assets/images/level_3/Light-off.png" id="14_g0m7m"]
+[ext_resource type="Texture2D" uid="uid://dhh3uux403ae0" path="res://assets/images/level_3/Button-yellow_up.png" id="14_lhkh2"]
+[ext_resource type="Texture2D" uid="uid://c66pbdmnvvuny" path="res://assets/images/level_3/Button-yellow_down.png" id="15_mgnkr"]
+[ext_resource type="Script" uid="uid://1o7ny3dokqqh" path="res://scripts/level/level_3/dial.gd" id="15_okpty"]
+[ext_resource type="Texture2D" uid="uid://h1svuwltflfb" path="res://assets/images/level_3/Button-submit_up.png" id="19_3ja61"]
+[ext_resource type="Texture2D" uid="uid://1ohru1gxh0tu" path="res://assets/images/level_3/Light-green.png" id="19_tje2u"]
+[ext_resource type="Texture2D" uid="uid://cix7e58b02h7x" path="res://assets/images/level_3/Button-submit_down.png" id="20_0wb05"]
+[ext_resource type="Texture2D" uid="uid://b0ns0qxfy6kfm" path="res://assets/images/level_3/Light-red.png" id="20_joxwt"]
+[ext_resource type="Texture2D" uid="uid://cbc44verev3w1" path="res://assets/images/level_3/mint_pot 16.png" id="21_0wb05"]
+[ext_resource type="Script" uid="uid://deyjvkdx5cg1m" path="res://scripts/level/level_3/herb.gd" id="21_88rp4"]
+[ext_resource type="Script" uid="uid://fyxjit7mbpmo" path="res://scripts/level/level_3/HintLight.gd" id="23_joxwt"]
+[ext_resource type="Texture2D" uid="uid://bc0npr7avd0sl" path="res://assets/images/level_3/blue.png" id="23_tje2u"]
+[ext_resource type="Texture2D" uid="uid://bshnwcvpda7nv" path="res://assets/images/level_3/yellow.png" id="24_joxwt"]
+[ext_resource type="Script" uid="uid://blj81v263y8py" path="res://scripts/level/level_3/DigitSlot.gd" id="26_dv2ml"]
+[ext_resource type="Script" uid="uid://ck7jxab624gxs" path="res://scripts/level/level_3/puzzle_machine_2.gd" id="26_m6xal"]
+[ext_resource type="AudioStream" uid="uid://6rpytl6m2xin" path="res://assets/audio/level_3/pickup_sound.mp3" id="28_51glb"]
+[ext_resource type="Script" uid="uid://sb2fmbox1kyd" path="res://scripts/level/level_3/key.gd" id="28_bnlkb"]
+[ext_resource type="Script" uid="uid://jb34nykojldk" path="res://scripts/level/level_3/door.gd" id="29_1ph5b"]
 [ext_resource type="PackedScene" uid="uid://cqcfbb8y3unow" path="res://scenes/guardian/guardian.tscn" id="34_jdpty"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n35tx"]
@@ -384,7 +384,7 @@ shape = SubResource("RectangleShape2D_ah86r")
 [node name="CanvasLayer" type="CanvasLayer" parent="puzzleMachine1" unique_id=1766602545]
 script = ExtResource("6_3ja61")
 
-[node name="ColorRect" type="ColorRect" parent="puzzleMachine1/CanvasLayer" unique_id=230930111]
+[node name="Background" type="ColorRect" parent="puzzleMachine1/CanvasLayer" unique_id=230930111]
 offset_left = -3.0
 offset_top = 1.0
 offset_right = 468.0
@@ -408,11 +408,11 @@ offset_bottom = 142.0
 texture_normal = ExtResource("12_nd7a6")
 texture_pressed = ExtResource("13_g0m7m")
 
-[node name="btnC" type="TextureButton" parent="puzzleMachine1/CanvasLayer" unique_id=1818960210]
-offset_left = 348.0
-offset_top = 62.0
-offset_right = 426.0
-offset_bottom = 138.0
+[node name="btnC" type="TextureButton" parent="puzzleMachine1/CanvasLayer" unique_id=2065930084]
+offset_left = 347.0
+offset_top = 64.0
+offset_right = 425.0
+offset_bottom = 140.0
 texture_normal = ExtResource("14_lhkh2")
 texture_pressed = ExtResource("15_mgnkr")
 

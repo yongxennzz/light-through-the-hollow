@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://cqcfbb8y3unow"]
 
 [ext_resource type="Script" uid="uid://cguxtk1jwr8d2" path="res://scripts/guardian/guardian.gd" id="1_wcu5v"]
-[ext_resource type="Texture2D" uid="uid://127va5t7poay" path="res://assets/guardians/guardian_attack_holster.png" id="2_d048r"]
-[ext_resource type="Texture2D" uid="uid://c7lukgqh5e1w0" path="res://assets/guardians/guardian_chase_idle.png" id="3_ffq5k"]
-[ext_resource type="Texture2D" uid="uid://bug4payfdh1yq" path="res://assets/guardians/guardian_chase_run.png" id="4_lnjmy"]
-[ext_resource type="Texture2D" uid="uid://cpnfr7crdscv3" path="res://assets/guardians/guardian_discover.png" id="5_asdke"]
-[ext_resource type="Texture2D" uid="uid://dat7ofq6rjd55" path="res://assets/guardians/guardian_patrol_idle.png" id="6_edhdn"]
-[ext_resource type="Texture2D" uid="uid://dynin7he3psxe" path="res://assets/guardians/guardian_patrol_run.png" id="7_68qs4"]
-[ext_resource type="Texture2D" uid="uid://ma8kgo0hbhvh" path="res://assets/guardians/guardian_stunned.png" id="8_0dkhn"]
+[ext_resource type="Texture2D" uid="uid://127va5t7poay" path="res://assets/images/gurdian/guardian/guardian_attack_holster.png" id="2_d048r"]
+[ext_resource type="Texture2D" uid="uid://c7lukgqh5e1w0" path="res://assets/images/gurdian/guardian/guardian_chase_idle.png" id="3_ffq5k"]
+[ext_resource type="Texture2D" uid="uid://bug4payfdh1yq" path="res://assets/images/gurdian/guardian/guardian_chase_run.png" id="4_lnjmy"]
+[ext_resource type="Texture2D" uid="uid://cpnfr7crdscv3" path="res://assets/images/gurdian/guardian/guardian_discover.png" id="5_asdke"]
+[ext_resource type="Texture2D" uid="uid://dat7ofq6rjd55" path="res://assets/images/gurdian/guardian/guardian_patrol_idle.png" id="6_edhdn"]
+[ext_resource type="Texture2D" uid="uid://dynin7he3psxe" path="res://assets/images/gurdian/guardian/guardian_patrol_run.png" id="7_68qs4"]
+[ext_resource type="Texture2D" uid="uid://ma8kgo0hbhvh" path="res://assets/images/gurdian/guardian/guardian_stunned.png" id="8_0dkhn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cpsn1"]
 size = Vector2(129, 177)
@@ -458,13 +458,7 @@ shape = SubResource("RectangleShape2D_cpsn1")
 texture_filter = 1
 scale = Vector2(4.6369576, 5.098957)
 sprite_frames = SubResource("SpriteFrames_fmkjd")
-animation = &"ChaseIdle"
-
-[node name="StunTimer" type="Timer" parent="." unique_id=1060794129]
-
-[node name="PatrolTimer" type="Timer" parent="." unique_id=129200797]
-
-[node name="DetectionTimer" type="Timer" parent="." unique_id=1003317760]
+animation = &"Attack"
 
 [node name="FacingRoot" type="Area2D" parent="." unique_id=455426941]
 

@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bdc38783jixlc" path="res://assets/images/woodlog2.png" id="3_8ehll"]
 [ext_resource type="Script" uid="uid://i86bxolky7un" path="res://scripts/level/level_1/level_1.gd" id="4_8yp2s"]
 [ext_resource type="Script" uid="uid://mmjqv7tmf35q" path="res://scripts/ui/selectlvl2button.gd" id="4_ccmqc"]
-[ext_resource type="Script" uid="uid://dhkj4i07ndngl" path="res://scripts/level/level_3/level_3.gd" id="5_swyxg"]
+[ext_resource type="Script" uid="uid://dhkj4i07ndngl" path="res://scripts/level/level_3/level_3button.gd" id="5_swyxg"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ccmqc"]
 texture = ExtResource("1_l0h45")
