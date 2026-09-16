@@ -1,7 +1,7 @@
 extends CanvasLayer
  
 # answer
-const BUTTON_SEQUENCE: Array[String] = ["C", "B", "A"]   # blue ->yellow->red
+const BUTTON_SEQUENCE: Array[String] = ["C", "B", "A"]   # yellow->blue->red
 const DIAL_TARGETS: Dictionary = {"A": 2, "B": 3, "C": 1}   # rotation_state: 0=0° 1=90° 2=180° 3=270°
  
 var pressed_sequence: Array[String] = []

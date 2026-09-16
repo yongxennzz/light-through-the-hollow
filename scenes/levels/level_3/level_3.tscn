@@ -294,9 +294,9 @@ route_a = [NodePath("ZonA_Point/PointA1"), NodePath("ZonA_Point/PointA2"), NodeP
 route_b = [NodePath("ZonB_Point/PointB1"), NodePath("ZonB_Point/PointB2"), NodePath("ZonB_Point/PointB3"), NodePath("ZonB_Point/PointB4"), NodePath("ZonB_Point/PointB5"), NodePath("ZonB_Point/PointB6"), NodePath("ZonB_Point/PointB7"), NodePath("ZonB_Point/PointB6"), NodePath("ZonB_Point/PointB5"), NodePath("ZonB_Point/PointB4"), NodePath("ZonB_Point/PointB3"), NodePath("ZonB_Point/PointB8"), NodePath("ZonB_Point/PointB9"), NodePath("ZonB_Point/PointB10"), NodePath("ZonB_Point/PointB11"), NodePath("ZonB_Point/PointB12"), NodePath("ZonB_Point/PointB13"), NodePath("ZonB_Point/PointB14")]
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=622661409]
-offset_left = -632.0
+offset_left = -631.0
 offset_top = -630.0
-offset_right = 2526.0
+offset_right = 2527.0
 offset_bottom = 1856.0
 color = Color(0.09411765, 0.078431375, 0.14509805, 1)
 
@@ -348,7 +348,7 @@ shape = SubResource("RectangleShape2D_83a0a")
 position = Vector2(1599.5, 1019.5)
 shape = SubResource("RectangleShape2D_qra2n")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Trap" unique_id=1721253018]
+[node name="damageZone3" type="CollisionShape2D" parent="Trap" unique_id=1721253018]
 position = Vector2(1743.5, 1019.5)
 shape = SubResource("RectangleShape2D_rr702")
 

@@ -225,17 +225,6 @@ func _check_vision() -> void:
 			state = State.DISCOVER
 
 
-# -vision detect
-func _on_vision_area_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player"):
-		target = body
-		state = State.DISCOVER
-
-
-func _on_vision_area_body_exited(body: Node2D) -> void:
-	if body == target:
-		_lose_target()
-
 
 # direction/facing
 @onready var facing_root: Node2D = $FacingRoot
