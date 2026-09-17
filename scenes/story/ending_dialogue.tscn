@@ -1,7 +1,9 @@
-[gd_scene load_steps=2 format=3]
-[ext_resource type="Script" path="res://scripts/story/story_dialogue.gd" id="1"]
-[node name="EndingDialogue" type="CanvasLayer"]
-layer = 100
+[gd_scene format=3 uid="uid://2117f5riikr4"]
+
+[ext_resource type="Script" uid="uid://cvpyljn4by3xp" path="res://scripts/story/story_dialogue.gd" id="1"]
+
+[node name="EndingDialogue" type="CanvasLayer" unique_id=304194671]
 process_mode = 3
+layer = 100
 script = ExtResource("1")
 story = "ending"
